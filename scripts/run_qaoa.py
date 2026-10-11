@@ -10,6 +10,7 @@ the shared IonQ/Qollab queue.
 import sys
 import time
 import itertools
+import ast
 
 import numpy as np
 from scipy.optimize import minimize
@@ -19,7 +20,7 @@ from qiskit_aer.primitives import EstimatorV2 as AerEstimator
 from qiskit_aer.primitives import SamplerV2 as AerSampler
 
 sys.path.insert(0, "scripts")
-from build_qubo import proxy_objective, brute_force_proxy  # reuse the already-validated objective
+from build_qubo import proxy_objective, brute_force_proxy, load_sites
 
 SHOTS = 4096
 REPS_LIST = [1, 2, 3]
@@ -123,7 +124,13 @@ def main():
             params[key] = val
     k = int(params["k"])
     A = float(params["A"])
-    site_ids = eval(params["site_ids"])
+    site_ids = ast.literal_eval(params["site_ids"])
+    current_sites = load_sites()
+    if (site_ids != current_sites["site_id"].tolist()
+            or c.shape != (len(current_sites),)
+            or Q.shape != (len(current_sites), len(current_sites))
+            or not np.allclose(c, current_sites["weight_c_i"].to_numpy())):
+        raise ValueError("Saved QUBO does not match current candidates; rerun build_qubo.py before QAOA.")
     n = len(c)
 
     print(f"n={n} qubits, k={k}, A={A}")

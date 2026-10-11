@@ -6,6 +6,17 @@ Qollab × IonQ Hackathon — Quantum Impact Track
 
 ## 0. Status
 
+**Geometry update (MASTER_TASKS step 2):** extraction now generates 15 observed
+transit locations with verified 400 m support, replacing the old eight centroids.
+See [`docs/CANDIDATE_GEOMETRY.md`](docs/CANDIDATE_GEOMETRY.md).
+The historical eight-site placements, QUBO/QAOA results, map, and numerical
+claims below have not yet been regenerated for this geometry. The old site-7
+Lake Banzena association/boost is disabled pending evidence for the new sites.
+**Coverage update (step 3):** the GPS-fix baseline is now implemented. At k=3,
+exact/greedy cover 1,075 of 21,972 visible fixes; the proxy covers 883 (82.14% of
+the candidate-constrained optimum). See [`docs/COVERAGE_BASELINE.md`](docs/COVERAGE_BASELINE.md).
+QUBO coefficients have been regenerated; old QAOA samples and map remain superseded.
+
 ### Reproduce the local pipeline
 
 Use **CPython 3.11 (64-bit)**. The tested environment uses Python 3.11.4 on Windows;

@@ -1,0 +1,42 @@
+{
+  "individual": "Salif Keita",
+  "demand_definition": "all visible GPS observations for selected individual; unit weight per row",
+  "radius_m": 400.0,
+  "budget": 3,
+  "candidate_count": 15,
+  "demand_fix_count": 21972,
+  "candidate_union_fix_count": 2085,
+  "exact": {
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "covered_fixes": 1075
+  },
+  "greedy": {
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "covered_fixes": 1075,
+    "ratio_to_exact": 1.0
+  },
+  "proxy": {
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "penalty_A": 1.0,
+    "penalized_objective": 2.8542,
+    "covered_fixes": 883,
+    "coverage_ratio_to_exact": 0.8213953488372093
+  },
+  "coverage_fraction_of_all_fixes": 0.0489259056981613,
+  "input_sha256": {
+    "data/candidate_sites.csv": "cde4faae0f24386139d21a29d6bff4a61f60bdcc7494cfb9ca859fc23ee23b91",
+    "data/elephant_gps_raw.csv": "5c3452b70bd8a9722589621d81a3bac74645a2dba4d2598af8aa42c486a908f8"
+  }
+}
