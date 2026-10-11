@@ -6,6 +6,14 @@ Qollab × IonQ Hackathon — Quantum Impact Track
 
 ## 0. Status
 
+**Conservation review (stage 4):** single-animal evidence covers 2008–2010.
+The 400 m radius is an assumed monitoring zone, not ordinary camera-trap range;
+0.5 km/h is a heuristic movement split. Long gaps have unknown movement state.
+Lake Banzena proximity does not justify a boost for any current candidate.
+See [`docs/CONSERVATION_VALIDATION.md`](docs/CONSERVATION_VALIDATION.md) for source
+checks, data quality, and sensitivity results. Older narrative below awaits
+the scheduled full documentation reconciliation.
+
 **Geometry update (MASTER_TASKS step 2):** extraction now generates 15 observed
 transit locations with verified 400 m support, replacing the old eight centroids.
 See [`docs/CANDIDATE_GEOMETRY.md`](docs/CANDIDATE_GEOMETRY.md).

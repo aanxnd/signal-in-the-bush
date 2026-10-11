@@ -1,0 +1,14 @@
+{
+  "name": "Oualet Benzena / approximate Banzena area",
+  "lat": 15.663,
+  "lon": -2.5878,
+  "source": "https://www.geonames.org/advanced-search.html?country=ML&featureClass=H&q=&startRow=250",
+  "historical_site7_lat": 15.592856921538463,
+  "historical_site7_lon": -2.594564207692308,
+  "historical_site7_distance_km": 7.833116741362717,
+  "nearest_current_site_id": 13,
+  "nearest_current_distance_km": 34.89704420989726,
+  "boost_enabled": false,
+  "candidate_input_sha256": "22801e2abaa020670713d79e87f128786beda4478eb9633648d4177f03305949",
+  "reason": "Approximate gazetteer proximity does not establish a sensor/shoreline match or calibrated ecological weight."
+}

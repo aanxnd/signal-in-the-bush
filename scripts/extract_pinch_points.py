@@ -2,8 +2,8 @@
 Track A: corridor/pinch-point extraction (see README.md Section 5).
 
 Splits GPS fixes into dwell (resting/feeding/watering) vs transit (moving
-through) before clustering, so candidate sensor sites come from actual
-movement corridors rather than places an elephant just stood still.
+through) before clustering. Candidates are movement-observation hotspots;
+their status as real corridor bottlenecks requires independent field evidence.
 
 Candidate n_fixes counts transit observations within 400 m, not whole-cluster
 membership. Broad DBSCAN clusters provide eligible observations, not centers.
@@ -19,6 +19,8 @@ MIN_CLUSTERS = 8
 MAX_CLUSTERS = 15
 SENSOR_RADIUS_M = 400.0
 MIN_LOCAL_TRANSIT_FIXES = 5
+MAX_SPEED_KMH = 7.0  # Wall et al. 2013 hourly GPS quality-control threshold
+MAX_STEP_GAP_HOURS = 3.0  # modeling choice; longer intervals have unknown movement state
 
 # This data package bundles two elephants from unrelated populations thousands
 # of km apart (Salif Keita: Gourma, Mali; Habiba: central Kenya) -- the Wall et
@@ -40,28 +42,48 @@ def haversine_m(lat1, lon1, lat2, lon2):
 def load_data(path):
     df = pd.read_csv(path)
     df = df[df["visible"].astype(str).str.lower() == "true"].copy()
-    df["timestamp"] = pd.to_datetime(df["timestamp"])
+    df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
+    coords = df[["location-lat", "location-long"]].to_numpy(dtype=float)
+    if (df["timestamp"].isna().any() or df["individual-local-identifier"].isna().any()
+            or not np.isfinite(coords).all() or (np.abs(coords[:, 0]) > 90).any()
+            or (np.abs(coords[:, 1]) > 180).any()):
+        raise ValueError("Visible fixes contain missing/invalid time, individual, or coordinates.")
+    if df.duplicated(["individual-local-identifier", "timestamp"]).any():
+        raise ValueError("Duplicate individual timestamps require explicit data review.")
+    if "event-id" in df and df["event-id"].duplicated().any():
+        raise ValueError("Duplicate event IDs require explicit data review.")
     df = df.sort_values(["individual-local-identifier", "timestamp"]).reset_index(drop=True)
     return df
 
 
 def compute_speed(df):
+    df = df.sort_values(["individual-local-identifier", "timestamp"], kind="stable").copy()
     grouped = df.groupby("individual-local-identifier")
     df["prev_lat"] = grouped["location-lat"].shift(1)
     df["prev_lon"] = grouped["location-long"].shift(1)
     df["prev_time"] = grouped["timestamp"].shift(1)
     dist_m = haversine_m(df["prev_lat"], df["prev_lon"], df["location-lat"], df["location-long"])
     dt_h = (df["timestamp"] - df["prev_time"]).dt.total_seconds() / 3600.0
-    df["speed_kmh"] = (dist_m / 1000.0) / dt_h
+    df["step_gap_hours"] = dt_h
+    df["speed_kmh"] = ((dist_m / 1000.0) / dt_h.where(dt_h > 0))
+    df["movement_known"] = (dt_h.gt(0) & dt_h.le(MAX_STEP_GAP_HOURS)
+                            & df["speed_kmh"].between(0, MAX_SPEED_KMH))
     return df
 
 
-def split_dwell_transit(df):
-    df["is_transit"] = (df["speed_kmh"] > DWELL_SPEED_THRESHOLD_KMH).fillna(False)
+def split_dwell_transit(df, threshold=DWELL_SPEED_THRESHOLD_KMH):
+    if not np.isfinite(threshold) or threshold <= 0:
+        raise ValueError("Transit threshold must be finite and positive.")
+    df["is_transit"] = df["movement_known"] & df["speed_kmh"].gt(threshold)
+    df["is_dwell"] = df["movement_known"] & df["speed_kmh"].le(threshold)
     return df
 
 
 def run_dbscan(points_df, eps_m, min_samples=5):
+    if not np.isfinite(eps_m) or eps_m <= 0:
+        raise ValueError("Clustering radius must be finite and positive.")
+    if points_df.empty:
+        return np.array([], dtype=int), 0
     coords = np.column_stack([
         np.radians(points_df["location-lat"].values),
         np.radians(points_df["location-long"].values),
@@ -109,13 +131,15 @@ def build_candidate_table(points_df, labels, representative=False):
     return table
 
 
-def build_local_candidates(points_df, labels):
+def build_local_candidates(points_df, labels, radius_m=SENSOR_RADIUS_M):
     """Subdivide broad clusters into distinct, locally supported detection areas.
 
     Greedily choose observed fixes by local support, excluding centers within
     two detection radii of a chosen center. Stop at the qubit cap or when no
     center has enough support. Noise fixes cannot be centers but count as evidence.
     """
+    if not np.isfinite(radius_m) or radius_m <= 0:
+        raise ValueError("Radius must be finite and positive.")
     labels = np.asarray(labels)
     if labels.ndim != 1 or len(labels) != len(points_df):
         raise ValueError("Cluster labels must have one entry per transit fix.")
@@ -130,7 +154,7 @@ def build_local_candidates(points_df, labels):
     if not np.isfinite(coords).all() or (np.abs(coords[:, 0]) > np.pi / 2).any() or (np.abs(coords[:, 1]) > np.pi).any():
         raise ValueError("Transit coordinates must be finite valid latitude/longitude.")
     tree = BallTree(coords, metric="haversine")
-    neighborhoods = tree.query_radius(coords, r=SENSOR_RADIUS_M / EARTH_RADIUS_M)
+    neighborhoods = tree.query_radius(coords, r=radius_m / EARTH_RADIUS_M)
     counts = np.array([len(indices) for indices in neighborhoods])
     eligible = np.asarray(labels) != -1
     rows = []
@@ -147,11 +171,11 @@ def build_local_candidates(points_df, labels):
             "lat": center["location-lat"], "lon": center["location-long"],
             "n_fixes": len(support),
             "cluster_n_fixes": int((np.asarray(labels) == cluster).sum()),
-            "support_radius_m": SENSOR_RADIUS_M,
+            "support_radius_m": radius_m,
             "n_individuals": support["individual-local-identifier"].nunique(),
             "individuals": ",".join(sorted(support["individual-local-identifier"].unique())),
         })
-        nearby = tree.query_radius(coords[best:best + 1], r=2 * SENSOR_RADIUS_M / EARTH_RADIUS_M)[0]
+        nearby = tree.query_radius(coords[best:best + 1], r=2 * radius_m / EARTH_RADIUS_M)[0]
         eligible[nearby] = False
     if not rows:
         raise ValueError("No locally supported candidate sites; review radius and clustering.")
@@ -195,9 +219,10 @@ def main():
     df = split_dwell_transit(df)
 
     transit = df[df["is_transit"]]
-    dwell = df[~df["is_transit"]]
+    dwell = df[df["is_dwell"]]
     print(f"Total fixes: {len(df)}")
     print(f"Transit fixes: {len(transit)} ({len(transit) / len(df):.1%})")
+    print(f"Unknown movement fixes: {int((~df['movement_known']).sum())}")
     print(f"Dwell fixes:   {len(dwell)} ({len(dwell) / len(df):.1%})")
 
     labels, eps_m, n_clusters = tune_eps_for_cluster_count(transit, MIN_CLUSTERS, MAX_CLUSTERS)

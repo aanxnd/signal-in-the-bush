@@ -36,7 +36,7 @@
   },
   "coverage_fraction_of_all_fixes": 0.0489259056981613,
   "input_sha256": {
-    "data/candidate_sites.csv": "cde4faae0f24386139d21a29d6bff4a61f60bdcc7494cfb9ca859fc23ee23b91",
+    "data/candidate_sites.csv": "22801e2abaa020670713d79e87f128786beda4478eb9633648d4177f03305949",
     "data/elephant_gps_raw.csv": "5c3452b70bd8a9722589621d81a3bac74645a2dba4d2598af8aa42c486a908f8"
   }
 }

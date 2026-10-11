@@ -1,0 +1,30 @@
+{
+  "individual": "Salif Keita",
+  "raw_rows_all_individuals": 23494,
+  "individual_counts": {
+    "Habiba": 1522,
+    "Salif Keita": 21972
+  },
+  "selected_raw_rows": 21972,
+  "selected_visible_rows": 21972,
+  "missing_or_invalid_timestamps": 0,
+  "duplicate_individual_timestamps": 0,
+  "duplicate_event_ids": 0,
+  "missing_coordinates": 0,
+  "start": "2008-03-22 17:00:00",
+  "end": "2010-09-30 22:00:00",
+  "speed_kmh_median": 0.2668604545892992,
+  "speed_kmh_max": 6.467508973004554,
+  "steps_over_7_kmh": 0,
+  "gaps_over_3_hours": 4,
+  "max_gap_hours": 110.0,
+  "unknown_movement_fixes": 5,
+  "nonpositive_steps": 0,
+  "input_sha256": "5c3452b70bd8a9722589621d81a3bac74645a2dba4d2598af8aa42c486a908f8",
+  "classification_config": {
+    "max_speed_kmh": 7.0,
+    "max_step_gap_hours": 3.0,
+    "threshold_kmh": 0.5
+  },
+  "invalid_coordinate_rows": 0
+}
