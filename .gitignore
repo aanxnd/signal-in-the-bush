@@ -6,3 +6,5 @@ ideation/
 
 __pycache__/
 *.pyc
+.venv/
+.verification/

@@ -6,6 +6,37 @@ Qollab × IonQ Hackathon — Quantum Impact Track
 
 ## 0. Status
 
+### Reproduce the local pipeline
+
+Use **CPython 3.11 (64-bit)**. The tested environment uses Python 3.11.4 on Windows;
+Python 3.14 is not the supported environment for this project. `requirements.txt`
+pins all application dependencies, including transitive dependencies.
+
+From a fresh clone, run these PowerShell commands in the repository root:
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pip check
+.\.venv\Scripts\python.exe scripts/run_pipeline.py
+```
+
+On macOS/Linux, create the environment with `python3.11 -m venv .venv` and use
+`.venv/bin/python` in place of `.\.venv\Scripts\python.exe` (not yet verified there).
+No environment activation is required. Package installation requires internet access;
+the four computation stages use the committed CSV data and local Aer without credentials.
+The runner executes extraction → QUBO → QAOA → map in order, stops on a failed stage,
+uses UTF-8 output on Windows, and rejects missing, empty, or stale stage outputs.
+Individual scripts must run from the repository root.
+
+Outputs overwrite `data/candidate_sites.csv`, `data/dwell_sites_context.csv`,
+`data/qubo_c.npy`, `data/qubo_Q.npy`, `data/qubo_params.txt`,
+`data/qaoa_result_p{1,2,3}.txt`, and `demo/map.html`. Open the HTML in a browser;
+its external map tiles and JavaScript/CSS require internet access. QAOA sampling
+and timings currently vary between runs; this setup reproduces execution, not
+identical samples. Modeling, coverage, repair, and metric corrections remain tracked
+in `MASTER_TASKS.md`; successful execution does not validate those scientific claims.
+
 This project was selected through the team's internal decision-matrix process (18.0/20, winner over three other candidates including a job-shop-scheduling proposal) — that ideation process lives in the team's separate planning workspace, not in this repo.
 
 **Submission deadline is today:** Sunday, Oct 11, 7:00 PM ET.

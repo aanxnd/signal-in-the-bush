@@ -64,7 +64,7 @@ def main():
         if is_chosen:
             folium.Marker(
                 location=[row["lat"], row["lon"]],
-                icon=folium.DivIcon(html=f'<div style="font-size:11pt;font-weight:bold;color:#7a5a1a;">{"\U0001F4F7"}</div>'),
+                icon=folium.DivIcon(html='<div style="font-size:11pt;font-weight:bold;color:#7a5a1a;">&#128247;</div>'),
             ).add_to(m)
 
     legend_html = """
