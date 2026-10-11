@@ -1,0 +1,3 @@
+# Optional source-audit tools; application dependencies are in requirements.txt.
+ruff==0.17.0
+vulture==2.16

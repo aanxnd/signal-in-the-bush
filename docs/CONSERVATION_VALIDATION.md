@@ -1,11 +1,11 @@
-# Conservation assumptions and data quality — stage 4
+# Conservation assumptions and data quality
 
 ## Scope and what the model means
 
 This is retrospective evidence from **one collared elephant, Salif Keita**,
-recorded from **22 March 2008 to 30 September 2010**, not 2008–2014. The full
-package contains 23,494 observations: 21,972 for Salif Keita and 1,522 for Habiba,
-not the earlier documentation's 330. Habiba remains excluded from optimization.
+recorded from **22 March 2008 to 30 September 2010**. The full
+package contains 23,494 observations: 21,972 for Salif Keita and 1,522 for Habiba.
+Habiba remains excluded from optimization.
 No multi-animal validation, poaching observations, patrol access constraints,
 prospective detection study, or deployment trial is available. Selected sites
 are supported movement-observation hotspots, not proven corridor bottlenecks or
@@ -75,7 +75,7 @@ selection objective here because candidate separation makes the overlap penalty 
 
 Default extraction and baseline were regenerated after movement-quality fixes:
 the default exact/greedy coverage remains 1,075 and proxy coverage remains 883.
-Historical QAOA and map artifacts still await their scheduled updates.
+QAOA, repair, repeated benchmarks, and the map now use the corrected default instance.
 
 ## Lake Banzena and boost decision
 
@@ -112,15 +112,13 @@ From the root in the pinned Python environment:
 
 The validation script saves quality, radius/threshold sensitivity, gap sensitivity,
 landmark checks, and hypothetical boost sensitivity. It does not overwrite
-candidate sites for the sensitivity scenarios. All 15 tests pass, including
-unknown-state handling and missing/duplicate timestamp rejection. These checks
+candidate sites for the sensitivity scenarios. Movement regression tests cover unknown-state handling, unsorted inputs, and missing/duplicate timestamp rejection. These checks
 validate the implementation and expose assumptions; they do not validate a
 field-ready anti-poaching system.
 
 ## Follow-up audit
 
-All 17 tests pass after fixing unsorted speed inputs, duplicate event-ID handling,
-and empty clustering/context inputs. The quality report now records the actual
+Regression checks also cover duplicate event IDs and empty clustering/context inputs. The quality report now records the actual
 classification constants and invalid-coordinate count. Landmark output records
 the current candidate-file hash. `data/sensitivity_candidates.csv` retains
 coordinates and local support for every scenario; the sensitivity summary also

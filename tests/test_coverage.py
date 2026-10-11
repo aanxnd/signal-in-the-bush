@@ -1,27 +1,39 @@
-import sys
-import unittest
 import itertools
+import sys
 import tempfile
+import unittest
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from build_qubo import build_coverage_sets, true_coverage, exact_max_coverage, greedy_max_coverage, load_sites
+from build_qubo import (
+    build_coverage_sets,
+    exact_max_coverage,
+    greedy_max_coverage,
+    load_sites,
+    true_coverage,
+)
 
 
 class CoverageTests(unittest.TestCase):
     def test_real_fix_geometry_and_unique_union(self):
-        sites = pd.DataFrame({'lat': [0.0, 0.0], 'lon': [0.0, 0.002]})
-        fixes = pd.DataFrame({'location-lat': [0.0] * 4, 'location-long': [0.001, 0.001, -0.003, 0.1]})
+        sites = pd.DataFrame({"lat": [0.0, 0.0], "lon": [0.0, 0.002]})
+        fixes = pd.DataFrame(
+            {"location-lat": [0.0] * 4, "location-long": [0.001, 0.001, -0.003, 0.1]}
+        )
         coverage = build_coverage_sets(sites, fixes)
-        np.testing.assert_array_equal(coverage, [[True, True, True, False], [True, True, False, False]])
+        np.testing.assert_array_equal(
+            coverage, [[True, True, True, False], [True, True, False, False]]
+        )
         self.assertEqual(true_coverage([0, 1], coverage)[0], 3)
         self.assertEqual(true_coverage([], coverage)[0], 0)
 
     def test_exact_ground_truth_when_greedy_is_suboptimal(self):
-        coverage = np.array([[1, 1, 1, 1, 0, 0], [1, 1, 0, 0, 1, 0], [0, 0, 1, 1, 0, 1]], dtype=bool)
+        coverage = np.array(
+            [[1, 1, 1, 1, 0, 0], [1, 1, 0, 0, 1, 0], [0, 0, 1, 1, 0, 1]], dtype=bool
+        )
         self.assertEqual(exact_max_coverage(coverage, 2), ((1, 2), 6))
         self.assertEqual(greedy_max_coverage(coverage, 2), ([0, 1], 5))
 
@@ -36,8 +48,8 @@ class CoverageTests(unittest.TestCase):
             true_coverage([-1], coverage)
 
     def test_invalid_coordinates_and_radius(self):
-        sites = pd.DataFrame({'lat': [91.0], 'lon': [0.0]})
-        fixes = pd.DataFrame({'location-lat': [0.0], 'location-long': [0.0]})
+        sites = pd.DataFrame({"lat": [91.0], "lon": [0.0]})
+        fixes = pd.DataFrame({"location-lat": [0.0], "location-long": [0.0]})
         with self.assertRaises(ValueError):
             build_coverage_sets(sites, fixes)
         with self.assertRaises(ValueError):
@@ -59,19 +71,27 @@ class CoverageTests(unittest.TestCase):
         for _ in range(20):
             coverage = rng.random((5, 12)) < 0.3
             for k in range(6):
-                expected = max(int(coverage[list(combo)].any(axis=0).sum())
-                               for size in range(k + 1)
-                               for combo in itertools.combinations(range(5), size))
+                expected = max(
+                    int(coverage[list(combo)].any(axis=0).sum())
+                    for size in range(k + 1)
+                    for combo in itertools.combinations(range(5), size)
+                )
                 self.assertEqual(exact_max_coverage(coverage, k)[1], expected)
                 self.assertLessEqual(greedy_max_coverage(coverage, k)[1], expected)
 
     def test_invalid_site_metadata_and_nonconsecutive_ids(self):
         with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / 'sites.csv'
-            valid = pd.DataFrame({'site_id': [20, 10], 'weight_c_i': [0.5, 1.0], 'support_radius_m': [400, 400]})
+            path = Path(directory) / "sites.csv"
+            valid = pd.DataFrame(
+                {"site_id": [20, 10], "weight_c_i": [0.5, 1.0], "support_radius_m": [400, 400]}
+            )
             valid.to_csv(path, index=False)
             self.assertEqual(load_sites(path).site_id.tolist(), [10, 20])
-            for column, value in [('site_id', 20), ('weight_c_i', np.nan), ('support_radius_m', 500)]:
+            for column, value in [
+                ("site_id", 20),
+                ("weight_c_i", np.nan),
+                ("support_radius_m", 500),
+            ]:
                 bad = valid.copy()
                 bad.loc[1, column] = value
                 bad.to_csv(path, index=False)
@@ -79,5 +99,5 @@ class CoverageTests(unittest.TestCase):
                     load_sites(path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

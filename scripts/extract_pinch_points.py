@@ -1,13 +1,14 @@
 """
-Track A: corridor/pinch-point extraction (see README.md Section 5).
+Extract locally supported candidate sites from observed elephant movement.
 
-Splits GPS fixes into dwell (resting/feeding/watering) vs transit (moving
-through) before clustering. Candidates are movement-observation hotspots;
+Classifies slower and faster GPS displacement before clustering; these
+heuristics do not directly observe behavior. Candidates are movement-observation hotspots;
 their status as real corridor bottlenecks requires independent field evidence.
 
 Candidate n_fixes counts transit observations within 400 m, not whole-cluster
 membership. Broad DBSCAN clusters provide eligible observations, not centers.
 """
+
 import numpy as np
 import pandas as pd
 from sklearn.cluster import DBSCAN
@@ -22,13 +23,7 @@ MIN_LOCAL_TRANSIT_FIXES = 5
 MAX_SPEED_KMH = 7.0  # Wall et al. 2013 hourly GPS quality-control threshold
 MAX_STEP_GAP_HOURS = 3.0  # modeling choice; longer intervals have unknown movement state
 
-# This data package bundles two elephants from unrelated populations thousands
-# of km apart (Salif Keita: Gourma, Mali; Habiba: central Kenya) -- the Wall et
-# al. 2014 paper used them as separate method examples, not a shared habitat.
-# Mixing them into one sensor-placement problem is not ecologically meaningful,
-# so we scope to one coherent population. Salif Keita has ~24x the transit fixes
-# (richer corridor signal) and dedicated literature on this exact population's
-# movement drivers (Wall et al. 2013, Biological Conservation).
+# The package includes unrelated Mali and Kenya tracks; optimize the Mali track only.
 INDIVIDUAL_FILTER = "Salif Keita"
 
 
@@ -44,9 +39,13 @@ def load_data(path):
     df = df[df["visible"].astype(str).str.lower() == "true"].copy()
     df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
     coords = df[["location-lat", "location-long"]].to_numpy(dtype=float)
-    if (df["timestamp"].isna().any() or df["individual-local-identifier"].isna().any()
-            or not np.isfinite(coords).all() or (np.abs(coords[:, 0]) > 90).any()
-            or (np.abs(coords[:, 1]) > 180).any()):
+    if (
+        df["timestamp"].isna().any()
+        or df["individual-local-identifier"].isna().any()
+        or not np.isfinite(coords).all()
+        or (np.abs(coords[:, 0]) > 90).any()
+        or (np.abs(coords[:, 1]) > 180).any()
+    ):
         raise ValueError("Visible fixes contain missing/invalid time, individual, or coordinates.")
     if df.duplicated(["individual-local-identifier", "timestamp"]).any():
         raise ValueError("Duplicate individual timestamps require explicit data review.")
@@ -65,9 +64,10 @@ def compute_speed(df):
     dist_m = haversine_m(df["prev_lat"], df["prev_lon"], df["location-lat"], df["location-long"])
     dt_h = (df["timestamp"] - df["prev_time"]).dt.total_seconds() / 3600.0
     df["step_gap_hours"] = dt_h
-    df["speed_kmh"] = ((dist_m / 1000.0) / dt_h.where(dt_h > 0))
-    df["movement_known"] = (dt_h.gt(0) & dt_h.le(MAX_STEP_GAP_HOURS)
-                            & df["speed_kmh"].between(0, MAX_SPEED_KMH))
+    df["speed_kmh"] = (dist_m / 1000.0) / dt_h.where(dt_h > 0)
+    df["movement_known"] = (
+        dt_h.gt(0) & dt_h.le(MAX_STEP_GAP_HOURS) & df["speed_kmh"].between(0, MAX_SPEED_KMH)
+    )
     return df
 
 
@@ -84,16 +84,24 @@ def run_dbscan(points_df, eps_m, min_samples=5):
         raise ValueError("Clustering radius must be finite and positive.")
     if points_df.empty:
         return np.array([], dtype=int), 0
-    coords = np.column_stack([
-        np.radians(points_df["location-lat"].values),
-        np.radians(points_df["location-long"].values),
-    ])
-    labels = DBSCAN(eps=eps_m / EARTH_RADIUS_M, min_samples=min_samples, metric="haversine").fit(coords).labels_
+    coords = np.column_stack(
+        [
+            np.radians(points_df["location-lat"].values),
+            np.radians(points_df["location-long"].values),
+        ]
+    )
+    labels = (
+        DBSCAN(eps=eps_m / EARTH_RADIUS_M, min_samples=min_samples, metric="haversine")
+        .fit(coords)
+        .labels_
+    )
     n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
     return labels, n_clusters
 
 
-def tune_eps_for_cluster_count(points_df, min_clusters, max_clusters, start_eps_m=1500.0, min_samples=5, max_attempts=25):
+def tune_eps_for_cluster_count(
+    points_df, min_clusters, max_clusters, start_eps_m=1500.0, min_samples=5, max_attempts=25
+):
     eps_m = start_eps_m
     labels, n_clusters = run_dbscan(points_df, eps_m, min_samples)
     for _ in range(max_attempts):
@@ -114,17 +122,29 @@ def build_candidate_table(points_df, labels, representative=False):
     for cluster_id, group in clustered.groupby("cluster"):
         lat, lon = group["location-lat"].mean(), group["location-long"].mean()
         support = group
-        rows.append({
-            "site_id": int(cluster_id),
-            "lat": lat,
-            "lon": lon,
-            "n_fixes": len(support),
-            "n_individuals": support["individual-local-identifier"].nunique(),
-            "individuals": ",".join(sorted(support["individual-local-identifier"].unique())),
-        })
+        rows.append(
+            {
+                "site_id": int(cluster_id),
+                "lat": lat,
+                "lon": lon,
+                "n_fixes": len(support),
+                "n_individuals": support["individual-local-identifier"].nunique(),
+                "individuals": ",".join(sorted(support["individual-local-identifier"].unique())),
+            }
+        )
     if not rows:
         # Dwell context is optional; preserve a readable CSV even with no clusters.
-        return pd.DataFrame(columns=["site_id", "lat", "lon", "n_fixes", "n_individuals", "individuals", "weight_c_i"])
+        return pd.DataFrame(
+            columns=[
+                "site_id",
+                "lat",
+                "lon",
+                "n_fixes",
+                "n_individuals",
+                "individuals",
+                "weight_c_i",
+            ]
+        )
     table = pd.DataFrame(rows).sort_values("n_fixes", ascending=False).reset_index(drop=True)
     if len(table):
         table["weight_c_i"] = (table["n_fixes"] / table["n_fixes"].max()).round(4)
@@ -151,7 +171,11 @@ def build_local_candidates(points_df, labels, radius_m=SENSOR_RADIUS_M):
         points = points.iloc[order].reset_index(drop=True)
         labels = labels[order]
     coords = np.radians(points[["location-lat", "location-long"]].to_numpy())
-    if not np.isfinite(coords).all() or (np.abs(coords[:, 0]) > np.pi / 2).any() or (np.abs(coords[:, 1]) > np.pi).any():
+    if (
+        not np.isfinite(coords).all()
+        or (np.abs(coords[:, 0]) > np.pi / 2).any()
+        or (np.abs(coords[:, 1]) > np.pi).any()
+    ):
         raise ValueError("Transit coordinates must be finite valid latitude/longitude.")
     tree = BallTree(coords, metric="haversine")
     neighborhoods = tree.query_radius(coords, r=radius_m / EARTH_RADIUS_M)
@@ -165,17 +189,20 @@ def build_local_candidates(points_df, labels, radius_m=SENSOR_RADIUS_M):
         support = points.iloc[neighborhoods[best]]
         center = points.iloc[best]
         cluster = int(labels[best])
-        rows.append({
-            "site_id": len(rows),
-            "source_cluster_id": cluster,
-            "lat": center["location-lat"], "lon": center["location-long"],
-            "n_fixes": len(support),
-            "cluster_n_fixes": int((np.asarray(labels) == cluster).sum()),
-            "support_radius_m": radius_m,
-            "n_individuals": support["individual-local-identifier"].nunique(),
-            "individuals": ",".join(sorted(support["individual-local-identifier"].unique())),
-        })
-        nearby = tree.query_radius(coords[best:best + 1], r=2 * radius_m / EARTH_RADIUS_M)[0]
+        rows.append(
+            {
+                "site_id": len(rows),
+                "source_cluster_id": cluster,
+                "lat": center["location-lat"],
+                "lon": center["location-long"],
+                "n_fixes": len(support),
+                "cluster_n_fixes": int((np.asarray(labels) == cluster).sum()),
+                "support_radius_m": radius_m,
+                "n_individuals": support["individual-local-identifier"].nunique(),
+                "individuals": ",".join(sorted(support["individual-local-identifier"].unique())),
+            }
+        )
+        nearby = tree.query_radius(coords[best : best + 1], r=2 * radius_m / EARTH_RADIUS_M)[0]
         eligible[nearby] = False
     if not rows:
         raise ValueError("No locally supported candidate sites; review radius and clustering.")
@@ -207,7 +234,9 @@ def validate_candidates(candidates, transit):
         others = candidates.loc[candidates.index != i]
         distances = haversine_m(row.lat, row.lon, others["lat"], others["lon"])
         if (distances <= 2 * SENSOR_RADIUS_M).any():
-            raise ValueError("Candidate detection areas must have centers more than two radii apart.")
+            raise ValueError(
+                "Candidate detection areas must have centers more than two radii apart."
+            )
 
 
 def main():
@@ -227,19 +256,27 @@ def main():
 
     labels, eps_m, n_clusters = tune_eps_for_cluster_count(transit, MIN_CLUSTERS, MAX_CLUSTERS)
     if not 1 <= n_clusters <= MAX_CLUSTERS:
-        raise ValueError(f"DBSCAN produced {n_clusters} clusters; must be 1..{MAX_CLUSTERS}. Adjust clustering before proceeding.")
+        raise ValueError(
+            f"DBSCAN produced {n_clusters} clusters; must be 1..{MAX_CLUSTERS}. Adjust clustering before proceeding."
+        )
     print(f"\nDBSCAN eps={eps_m:.0f}m -> {n_clusters} transit clusters")
 
     candidates = build_candidate_table(transit, labels, representative=True)
     validate_candidates(candidates, transit)
-    print(f"Selected {len(candidates)} local sites with >= {MIN_LOCAL_TRANSIT_FIXES} transit fixes within {SENSOR_RADIUS_M:.0f}m (cap {MAX_CLUSTERS}).")
+    print(
+        f"Selected {len(candidates)} local sites with >= {MIN_LOCAL_TRANSIT_FIXES} transit fixes within {SENSOR_RADIUS_M:.0f}m (cap {MAX_CLUSTERS})."
+    )
     candidates.to_csv("data/candidate_sites.csv", index=False)
-    print(f"\nCandidate sensor sites (-> data/candidate_sites.csv):\n{candidates.to_string(index=False)}")
+    print(
+        f"\nCandidate sensor sites (-> data/candidate_sites.csv):\n{candidates.to_string(index=False)}"
+    )
 
-    dwell_labels, dwell_n = run_dbscan(dwell, eps_m)  # same spatial scale, no qubit constraint
+    dwell_labels, _ = run_dbscan(dwell, eps_m)  # same spatial scale, no qubit constraint
     dwell_sites = build_candidate_table(dwell, dwell_labels)
     dwell_sites.to_csv("data/dwell_sites_context.csv", index=False)
-    print(f"\nDwell/rest sites (demo-map context only, NOT sensor candidates): {len(dwell_sites)} found -> data/dwell_sites_context.csv")
+    print(
+        f"\nDwell/rest context sites (not sensor candidates): {len(dwell_sites)} found -> data/dwell_sites_context.csv"
+    )
 
 
 if __name__ == "__main__":

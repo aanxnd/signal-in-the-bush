@@ -1,4 +1,4 @@
-# Metrics and timing — stage 7
+# Metrics and timing
 
 `benchmark_pipeline.py` measures the corrected 15-site instance on one machine.
 Classical exact GPS coverage, greedy GPS coverage, and exact proxy enumeration
@@ -71,7 +71,7 @@ benchmarking. Without that flag the runner performs one seed-42 run per depth.
 The benchmark publishes seed-42 results as `data/qaoa_result_p*.json/.txt` with
 convergence logs, preserving other seeds under `data/benchmarks/`. Repair outputs
 must be regenerated afterward; the repeated benchmark does not silently reuse
-old sample artifacts. The later map task still needs its scheduled correction.
+old sample artifacts. The pipeline rebuilds the generated results map after repair.
 
 To regenerate only the summary from saved benchmark trials, use
 `scripts/benchmark_pipeline.py --summarize`; this performs no new optimization.
@@ -97,30 +97,10 @@ mean times are approximately 17.8 ms and 4.9 ms; proxy exact enumeration average
 The classical algorithm is much faster at this instance size. Larger depth
 does not establish a reliable quality improvement from these three seeds.
 
-All 32 tests pass, including a two-qubit repeated-seed sampling check and
-convergence-history checks. `validate_benchmarks.py` passes for all nine trials;
+Regression tests include a two-qubit repeated-seed sampling check and convergence-history checks. `validate_benchmarks.py` passes for all nine trials;
 current seed-42 repair outputs were regenerated. A summary-only path error was
 fixed and the final summary regenerated successfully from the raw trial files.
 Syntax and whitespace checks pass. No repeated benchmark is inferred from
 the older single-run timing values.
 
-## Dedicated stage-7 audit
-
-Fixed incomplete/duplicate seed-set acceptance in summary generation, added
-hash checks to summary-only execution, and strengthened current radius/budget
-checks before future benchmark runs. New run records also include the raw GPS
-hash directly, in addition to the batch configuration's existing raw-data hash.
-The generated report now explicitly shows successful-selection denominators.
-
-Replaced removable Python assertions in the artifact validator with explicit
-errors. Validation now reconstructs coverage from GPS coordinates, recomputes
-both exact references, checks trial selection/rates, classical repeat identities,
-all quality means and standard deviations, and convergence counts. The evidence
-passes under ordinary and optimized (`-O`) Python. An intentionally corrupted
-sampling-rate summary was correctly rejected. All 32 tests pass, including
-missing/duplicate-seed regression cases; syntax and whitespace checks pass.
-
-Timings, samples, selected placements, and scientific findings are unchanged.
-No expensive optimizer rerun was needed: changes affect input/report validation,
-not the measured circuit or solver behavior. Existing timing-boundary asymmetry
-is explicitly disclosed above; the results remain scoped solver measurements.
+Saved-evidence validation reconstructs GPS coverage, recomputes exact references, checks each configured seed and classical repeat, and verifies rates, selected repairs, convergence logs, and aggregate means/sample standard deviations. Validation uses explicit exceptions and also runs under optimized (`-O`) Python. Regression tests reject missing/duplicate seeds and corrupted summaries.

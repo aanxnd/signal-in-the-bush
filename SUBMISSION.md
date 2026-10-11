@@ -1,35 +1,43 @@
-# Submission Summary — Signal in the Bush
+# Signal in the Bush — submission summary
 
-**Theme:** Quantum Impact
+**Theme: Quantum Impact**
 
 *This effort is supported by Qollab & IonQ.*
 
-## Written Summary (by judging criterion)
+**Execution status:** verified locally with Qiskit Aer on CPU. The required Qollab/IonQ simulator run is deferred and has not been completed. Public runnable-project verification and a recorded demo video remain open. This summary describes the implemented local prototype and does not certify submission readiness.
 
-### Novelty and Creativity
-Quantum hackathons are saturated with job-shop-scheduling and portfolio-optimization QAOA demos. This project instead applies the hybrid quantum/classical pipeline to **conservation**: real GPS-collar elephant movement data, scoped to the Gourma, Mali population (Salif Keita — the longest documented land migration of any African elephant), to choose anti-poaching sensor placements. The combination of real wildlife-tracking data, a correctness-driven pipeline redesign mid-build (see below), and an honest "here's exactly where QAOA stands" framing rather than an overclaimed speedup is the novel contribution — not a new algorithm, but a disciplined application with real data and real constraints.
+## Novelty and creativity
 
-### Technical Execution
-The pipeline is built from verified, real data end to end, not placeholders:
-- **Data:** downloaded directly from the Movebank Data Repository's REST API (not the JS-rendered landing page); discovered mid-build that the package secretly bundles two unrelated elephants on different continents (Mali vs. Kenya) and corrected scope to one coherent population.
-- **Methodology fix:** a teammate caught that raw GPS-fix density conflates "animal stood here" with "animal passes through here" — fixed via a dwell/transit speed split before clustering, so sensor candidates come from movement corridors, not rest sites.
-- **Correctness fix:** a second teammate caught that the QUBO formulation is not literal maximum coverage (true coverage needs a qubit per demand point — infeasible under the <16 qubit cap). Resolved by building two honestly-separate baselines: a true max-coverage classical solver (real $1-1/e$ guarantee) and the qubit-budget proxy QAOA actually solves, then reporting both.
-- **QUBO → Ising conversion is numerically validated**, not hand-derived on faith: the script brute-forces every bitstring and checks the Ising Hamiltonian's energy against the QUBO objective before any quantum circuit runs. This caught two real bugs (an unzeroed self-overlap diagonal, and a broken approximation-ratio metric) before they could produce misleading results.
-- **QAOA results are reported honestly**: approximation ratio improves from p=1 (-29%, unconverged) to p=2 (65%), then plateaus at p=3. It does not find the true optimum at any tested depth — stated plainly rather than hidden.
+The project applies a hybrid quantum-classical placement experiment to real conservation data: recorded elephant movement in Gourma, Mali. It distinguishes transit-based site selection from all-observation coverage, compares the compact quantum objective with the actual coverage objective, and exposes the consequences on a map. The contribution is the application and reproducible evaluation, not a new quantum algorithm.
 
-### Impact Potential
-Anti-poaching resource allocation is a real, current problem: ranger patrols and camera traps are scarce relative to the corridors wildlife actually use. The pipeline is directly extensible to other collared populations and other conservation areas on the same (free, CC0) Movebank data infrastructure. The qubit-budget-respecting proxy formulation technique — approximating coverage via pairwise redundancy penalty instead of per-demand-point indicator variables — generalizes to other small-budget facility-location problems under the same quantum hardware constraints.
+## Technical execution
 
-### Documentation Quality
-The full technical report, QUBO derivation (including the qubit-budget gotcha and how it's avoided), dataset provenance, and an honest accounting of every bug found and fixed during the build are in [`README.md`](README.md). Task breakdown and team division of labor are in [`TASKS.md`](TASKS.md). All code is in [`scripts/`](scripts/), run in this order: `extract_pinch_points.py` → `build_qubo.py` → `run_qaoa.py` → `build_demo_map.py`.
+The pipeline validates 21,972 visible observations of Salif Keita from March 2008 through September 2010. It excludes the unrelated Kenya track, classifies movement with explicit quality limits, and selects 15 locally supported observed transit locations. A three-site budget and assumed 400 m monitoring radius define the experiment.
+
+Exact enumeration and greedy solve observation coverage; a 15-qubit QAOA circuit optimizes a transit-weight proxy with a soft count penalty. All 32,768 binary assignments validate the QUBO-to-Ising conversion. Local Aer runs depths 1/2/3 with 4,096 final shots, exact optimizer expectations, three COBYLA restarts, and recorded convergence. Selection uses the best feasible measured proxy answer. Classical budget repair preserves raw outcomes and records changes separately.
+
+All nine benchmark trials, using three seeds per depth, selected sites [0,1,2], matching the proxy optimum. These cover 883 observations, or 82.14% of the candidate-constrained GPS optimum of 1,075 at [0,1,4]. Mean proxy-optimal shot rates were 5.25%/3.04%/6.60%. The selected answers already met the budget and were unchanged by repair. Deeper optimizer runs did not have all restarts converge within their evaluation limit.
+
+Ten classical repeats and three trials per depth retain timings, means/sample standard deviations, input hashes, configuration, counts, and convergence evidence. Classical solvers are faster on this small instance. No quantum advantage is demonstrated. [Benchmark results](docs/BENCHMARK_RESULTS.md) explain outcomes; [methodology](docs/BENCHMARKING.md) defines unequal solver timing boundaries.
+
+## Impact potential and limits
+
+The experiment offers a transparent way to investigate limited monitoring resources. Its current output is not a field-ready recommendation: one animal, an observation-density shortlist, assumed radius, and no poaching-event, terrain, access, or device calibration limit ecological conclusions. The 400 m circles are planning zones, not camera detection specifications. Current candidates are separated, so the proxy's pairwise overlap term is zero. No Banzena candidate association or ecological boost is applied.
+
+## Documentation and reproduction
+
+[README.md](README.md) contains setup, model, results, limitations, and artifact locations. [TASKS.md](TASKS.md) records completion states. [Map guide](docs/DEMO_MAP.md) explains all controls. [Video script](demo/VIDEO_SCRIPT.md) is ready for recording but is not a recorded video. The repository is [aanxnd/signal-in-the-bush](https://github.com/aanxnd/signal-in-the-bush).
 
 ## Disclosure
 
-- **Dataset:** Wall, Wittemyer, LeMay, Douglas-Hamilton & Klinkenberg (2014), Movebank Data Repository, doi:10.5441/001/1.f321pf80, CC0 1.0 Universal. Full citation and license in [`README.md`](README.md#3-dataset--downloaded-and-verified).
-- **Libraries:** Qiskit + Qiskit Aer (quantum circuits/simulation), scikit-learn (DBSCAN), pandas/numpy (data processing), folium (demo map), scipy (classical optimization) — all open source, used under their respective licenses, no modification to the libraries themselves.
-- **AI tool use:** Claude (Anthropic) was used throughout development — for data pipeline code, the QUBO/Ising derivation and its numerical validation, bug fixes, documentation, and this summary. All quantum-domain decisions (formulation choices, parameter values, interpretation of results) were reviewed by the team; the dwell/transit methodology fix and the max-coverage-vs-proxy correctness fix originated from team members' own review of the work, not from the AI.
-- **Team:** built during the Oct 9–11 build window, by the team registered for this hackathon. No prior-existing code reused.
+- **Data:** Wall et al. (2014), Movebank Data Repository, doi:10.5441/001/1.f321pf80, CC0 1.0. Full citations and original package terms are linked in the README.
+- **Software:** Qiskit, Qiskit Aer, SciPy, NumPy, pandas, scikit-learn, and Folium, with pinned transitive dependencies under their respective licenses. Project code is [MIT](LICENSE).
+- **AI assistance:** Claude (Anthropic) assisted earlier development, including code, derivation, debugging, and writing. OpenAI Codex assisted subsequent implementation, audits, tests, and documentation. AI assistance does not constitute independent scientific or field validation; formulas, checks, assumptions, and saved evidence are available for review.
+- **Support attribution:** the required Qollab & IonQ acknowledgment above does not imply that IonQ execution has occurred.
 
-## License
+## Outstanding submission work
 
-MIT — see [`LICENSE`](LICENSE).
+1. Run the corrected experiment on the required Qollab/IonQ simulator and retain backend/job/configuration/results evidence; currently deferred.
+2. Update this execution statement and affected results only after that evidence exists.
+3. Verify the public Qollab project and runnable instructions from a logged-out session.
+4. Record and attach the two-minute video and complete the final submission check.
