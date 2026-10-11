@@ -1,0 +1,92 @@
+{
+  "p": 1,
+  "backend": "local qiskit Aer SamplerV2",
+  "budget": 3,
+  "radius_m": 400.0,
+  "repair_rule": "trim least GPS-coverage loss; fill greatest positive GPS-coverage gain; ties by site ID",
+  "proxy_optimum": 2.8542,
+  "gps_coverage_optimum": 1075,
+  "input_sha256": {
+    "data/candidate_sites.csv": "22801e2abaa020670713d79e87f128786beda4478eb9633648d4177f03305949",
+    "data/elephant_gps_raw.csv": "5c3452b70bd8a9722589621d81a3bac74645a2dba4d2598af8aa42c486a908f8",
+    "data/coverage_sets.npz": "bae30cc073b7e8ebaa49724fbc04f06811cedc8cae84396e4b12ffb72fd72d24",
+    "data/coverage_baselines.json": "c545375c62fe646d4ed7abc089e8459edf331e3e87e5046b53ba6f62d8844cac",
+    "data/qubo_c.npy": "0f7fa3733f3391d5cd6f3c0f38970848bdb01abccf5442108d9d95be6d4bd665",
+    "data/qubo_Q.npy": "c7c2146b46dcd1787bf4b49409edd836ddd1ae5855067394a294b14da03ed33a",
+    "data/qubo_params.txt": "e921bd9d2919e89533ad01a9a21d7923b732951079066a587509c465b7196f60",
+    "data\\qaoa_result_p1.json": "59bed7d3c17bdae91dcf81c8eaae2405fba7bac21ee50aaba6622f415917910c"
+  },
+  "mode": {
+    "raw_bitstring": "000000000000111",
+    "actions": [],
+    "raw": {
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "selected_count": 3,
+      "feasible": true,
+      "penalized_proxy_score": 2.8542,
+      "proxy_score_ratio": 1.0,
+      "covered_fixes": 883,
+      "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+      "coverage_comparison_valid": true
+    },
+    "repaired": {
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "selected_count": 3,
+      "feasible": true,
+      "penalized_proxy_score": 2.8542,
+      "proxy_score_ratio": 1.0,
+      "covered_fixes": 883,
+      "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+      "coverage_comparison_valid": true
+    }
+  },
+  "selected_raw": {
+    "raw_bitstring": "000000000000111",
+    "actions": [],
+    "raw": {
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "selected_count": 3,
+      "feasible": true,
+      "penalized_proxy_score": 2.8542,
+      "proxy_score_ratio": 1.0,
+      "covered_fixes": 883,
+      "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+      "coverage_comparison_valid": true
+    },
+    "repaired": {
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "selected_count": 3,
+      "feasible": true,
+      "penalized_proxy_score": 2.8542,
+      "proxy_score_ratio": 1.0,
+      "covered_fixes": 883,
+      "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+      "coverage_comparison_valid": true
+    }
+  },
+  "distribution": {
+    "shots": 4096,
+    "changed_shots": 2619,
+    "changed_rate": 0.639404296875,
+    "repaired_feasible_rate": 1.0,
+    "raw_mean_covered_fixes": 760.991455078125,
+    "repaired_mean_covered_fixes": 825.03125,
+    "note": "Raw mean includes infeasible placements; it is not a budget-valid benchmark."
+  }
+}

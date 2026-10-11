@@ -6,6 +6,12 @@ Qollab × IonQ Hackathon — Quantum Impact Track
 
 ## 0. Status
 
+**Budget repair (stage 6):** raw and repaired selected/modal placements and full
+sample distributions are evaluated against both reference optima. The selected
+[0,1,2] placement already uses three sensors and stays unchanged: 883 fixes,
+82.14% of the GPS optimum. All repaired sampled outcomes are budget-feasible.
+See [`docs/BUDGET_REPAIR.md`](docs/BUDGET_REPAIR.md). Repeated benchmarking is next.
+
 **Sampling update (stage 5):** local Aer results now use the corrected 15-site
 instance and explicitly distinguish mode from best feasible sampled output.
 Full distributions and sampling rates are in `data/qaoa_result_p*.json`;

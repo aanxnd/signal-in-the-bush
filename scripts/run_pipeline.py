@@ -16,6 +16,8 @@ def main():
                            "data/coverage_baselines.json", "data/coverage_sets.npz", "data/coverage_demand.csv")),
         ("run_qaoa.py", tuple(f"data/qaoa_result_p{p}.{extension}" for p in (1, 2, 3)
                               for extension in ("txt", "json"))),
+        ("repair_qaoa.py", tuple(name for p in (1, 2, 3) for name in
+                                (f"data/qaoa_repair_p{p}.json", f"data/qaoa_repair_samples_p{p}.csv"))),
         ("build_demo_map.py", ("demo/map.html",)),
     ):
         print(f"\nRunning {script}", flush=True)
