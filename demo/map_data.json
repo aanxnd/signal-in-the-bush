@@ -1,0 +1,180 @@
+{
+  "individual": "Salif Keita",
+  "dates": "2008-03-22 to 2010-09-30",
+  "observations": 21972,
+  "radius_m": 400.0,
+  "placements": [
+    {
+      "label": "Classical GPS optimum",
+      "symbol": "C",
+      "color": "#005a9c",
+      "sites": [
+        0,
+        1,
+        4
+      ],
+      "covered_fixes": 1075
+    },
+    {
+      "label": "QAOA p=1 raw",
+      "symbol": "Q",
+      "color": "#9c3200",
+      "p": 1,
+      "backend": "local qiskit Aer SamplerV2",
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "available": true,
+      "covered_fixes": 883
+    },
+    {
+      "label": "QAOA p=1 repaired",
+      "symbol": "R",
+      "color": "#663399",
+      "p": 1,
+      "backend": "local qiskit Aer SamplerV2",
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "available": true,
+      "covered_fixes": 883
+    },
+    {
+      "label": "QAOA p=2 raw",
+      "symbol": "Q",
+      "color": "#9c3200",
+      "p": 2,
+      "backend": "local qiskit Aer SamplerV2",
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "available": true,
+      "covered_fixes": 883
+    },
+    {
+      "label": "QAOA p=2 repaired",
+      "symbol": "R",
+      "color": "#663399",
+      "p": 2,
+      "backend": "local qiskit Aer SamplerV2",
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "available": true,
+      "covered_fixes": 883
+    },
+    {
+      "label": "QAOA p=3 raw",
+      "symbol": "Q",
+      "color": "#9c3200",
+      "p": 3,
+      "backend": "local qiskit Aer SamplerV2",
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "available": true,
+      "covered_fixes": 883
+    },
+    {
+      "label": "QAOA p=3 repaired",
+      "symbol": "R",
+      "color": "#663399",
+      "p": 3,
+      "backend": "local qiskit Aer SamplerV2",
+      "sites": [
+        0,
+        1,
+        2
+      ],
+      "available": true,
+      "covered_fixes": 883
+    }
+  ],
+  "candidates": [
+    {
+      "site_id": 0,
+      "lat": 15.65187,
+      "lon": -2.1603233
+    },
+    {
+      "site_id": 1,
+      "lat": 15.6589,
+      "lon": -2.1692383
+    },
+    {
+      "site_id": 2,
+      "lat": 15.2956833,
+      "lon": -2.1395067
+    },
+    {
+      "site_id": 3,
+      "lat": 15.6661233,
+      "lon": -2.1741
+    },
+    {
+      "site_id": 4,
+      "lat": 15.289395,
+      "lon": -2.1341417
+    },
+    {
+      "site_id": 5,
+      "lat": 15.6471867,
+      "lon": -2.1461117
+    },
+    {
+      "site_id": 6,
+      "lat": 15.7295017,
+      "lon": -2.257155
+    },
+    {
+      "site_id": 7,
+      "lat": 15.6495067,
+      "lon": -2.1685383
+    },
+    {
+      "site_id": 8,
+      "lat": 15.227235,
+      "lon": -1.4889083
+    },
+    {
+      "site_id": 9,
+      "lat": 15.0191967,
+      "lon": -1.7349767
+    },
+    {
+      "site_id": 10,
+      "lat": 15.2329833,
+      "lon": -1.5030483
+    },
+    {
+      "site_id": 11,
+      "lat": 15.652255,
+      "lon": -2.1524133
+    },
+    {
+      "site_id": 12,
+      "lat": 15.7212983,
+      "lon": -2.2561183
+    },
+    {
+      "site_id": 13,
+      "lat": 15.7297333,
+      "lon": -2.2692617
+    },
+    {
+      "site_id": 14,
+      "lat": 15.24877,
+      "lon": -1.5527867
+    }
+  ]
+}

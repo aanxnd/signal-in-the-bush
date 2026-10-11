@@ -20,7 +20,7 @@ def main():
          + (("data/benchmark_metrics.csv", "docs/BENCHMARK_RESULTS.md") if "--benchmark" in sys.argv else ())),
         ("repair_qaoa.py", tuple(name for p in (1, 2, 3) for name in
                                 (f"data/qaoa_repair_p{p}.json", f"data/qaoa_repair_samples_p{p}.csv"))),
-        ("build_demo_map.py", ("demo/map.html",)),
+        ("build_demo_map.py", ("demo/map.html", "demo/map_data.json")),
     ):
         print(f"\nRunning {script}", flush=True)
         started = time.time()
