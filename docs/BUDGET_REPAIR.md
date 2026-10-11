@@ -23,7 +23,11 @@ the repaired distribution is diagnostic and is not searched for a replacement
 winner. If stage 5 found no feasible sample, its selected output remains null;
 the mode and sampled distribution can still be repaired independently.
 
-## Metrics and current results
+## Metrics and original stage-6 results
+
+The distribution figures below are the original stage-6 observations. Stage 7
+regenerates canonical samples with an explicit thread configuration and reruns
+repair; current JSON/CSV outputs are authoritative for the latest observations.
 
 Both raw and repaired placements report penalized proxy score, score ratio to
 exact proxy optimum, actual covered fixes, and coverage ratio to the

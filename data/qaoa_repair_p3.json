@@ -14,7 +14,7 @@
     "data/qubo_c.npy": "0f7fa3733f3391d5cd6f3c0f38970848bdb01abccf5442108d9d95be6d4bd665",
     "data/qubo_Q.npy": "c7c2146b46dcd1787bf4b49409edd836ddd1ae5855067394a294b14da03ed33a",
     "data/qubo_params.txt": "e921bd9d2919e89533ad01a9a21d7923b732951079066a587509c465b7196f60",
-    "data\\qaoa_result_p3.json": "b6443c565a2b737f01a4df34c67c3b8dd209278fe5cd06a9a48ccc0daead060b"
+    "data\\qaoa_result_p3.json": "8be12c45dd35fd68562fdfe37b2e509248ab250ad09bcb2532dffee54e0f6c73"
   },
   "mode": {
     "raw_bitstring": "000000000000111",
@@ -82,11 +82,11 @@
   },
   "distribution": {
     "shots": 4096,
-    "changed_shots": 2945,
-    "changed_rate": 0.718994140625,
+    "changed_shots": 2908,
+    "changed_rate": 0.7099609375,
     "repaired_feasible_rate": 1.0,
-    "raw_mean_covered_fixes": 753.310791015625,
-    "repaired_mean_covered_fixes": 915.55126953125,
+    "raw_mean_covered_fixes": 740.699462890625,
+    "repaired_mean_covered_fixes": 914.177978515625,
     "note": "Raw mean includes infeasible placements; it is not a budget-valid benchmark."
   }
 }

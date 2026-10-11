@@ -51,7 +51,11 @@ shot-weighted rates, under-budget and absent-feasible cases, tied optima,
 deterministic ties, bit ordering, malformed measurements, and count totals.
 All 21 project tests pass. Syntax and whitespace checks pass.
 
-## Current local Aer observations
+## Stage-5 local Aer observations
+
+This table records the original stage-5 configuration. Stage 7 fixes simulation
+threads explicitly and regenerates canonical samples; consult `BENCHMARK_RESULTS.md`
+and the current result JSON files for the latest repeated measurements.
 
 | Depth | Feasible shots / 4096 | Proxy-optimal shots / 4096 | Proxy-optimal rate |
 |---|---|---|---|

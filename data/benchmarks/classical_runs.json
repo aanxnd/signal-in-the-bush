@@ -1,0 +1,512 @@
+[
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 0,
+    "wall_time_s": 0.016507699969224632,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 1,
+    "wall_time_s": 0.014658299973234534,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 2,
+    "wall_time_s": 0.014831300009973347,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 3,
+    "wall_time_s": 0.01928330003283918,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 4,
+    "wall_time_s": 0.012895600055344403,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 5,
+    "wall_time_s": 0.01982679998036474,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 6,
+    "wall_time_s": 0.020255899988114834,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 7,
+    "wall_time_s": 0.020009999978356063,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 8,
+    "wall_time_s": 0.020055899978615344,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_gps_coverage",
+    "repeat": 9,
+    "wall_time_s": 0.02001219999510795,
+    "sites": [
+      0,
+      1,
+      4
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 0,
+    "wall_time_s": 0.0047417000168934464,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 1,
+    "wall_time_s": 0.00493059994187206,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 2,
+    "wall_time_s": 0.004952899995259941,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 3,
+    "wall_time_s": 0.004712700028903782,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 4,
+    "wall_time_s": 0.005143500049598515,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 5,
+    "wall_time_s": 0.004609300056472421,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 6,
+    "wall_time_s": 0.004629499977454543,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 7,
+    "wall_time_s": 0.003912799991667271,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 8,
+    "wall_time_s": 0.005845899926498532,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "greedy_gps_coverage",
+    "repeat": 9,
+    "wall_time_s": 0.005531200091354549,
+    "sites": [
+      0,
+      4,
+      1
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.6042,
+    "proxy_score_ratio": 0.9124097820755378,
+    "covered_fixes": 1075,
+    "coverage_ratio_to_feasible_optimum": 1.0,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 0,
+    "wall_time_s": 0.3187745000468567,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 1,
+    "wall_time_s": 0.3540621999418363,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 2,
+    "wall_time_s": 0.2929633999010548,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 3,
+    "wall_time_s": 0.22729800001252443,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 4,
+    "wall_time_s": 0.24497050000354648,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 5,
+    "wall_time_s": 0.21930280001834035,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 6,
+    "wall_time_s": 0.24782539997249842,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 7,
+    "wall_time_s": 0.29059549991507083,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 8,
+    "wall_time_s": 0.24088880000635982,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  },
+  {
+    "method": "exact_proxy",
+    "repeat": 9,
+    "wall_time_s": 0.24700830003712326,
+    "sites": [
+      0,
+      1,
+      2
+    ],
+    "selected_count": 3,
+    "feasible": true,
+    "penalized_proxy_score": 2.8542,
+    "proxy_score_ratio": 1.0,
+    "covered_fixes": 883,
+    "coverage_ratio_to_feasible_optimum": 0.8213953488372093,
+    "coverage_comparison_valid": true
+  }
+]

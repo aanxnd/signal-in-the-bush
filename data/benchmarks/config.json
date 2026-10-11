@@ -1,0 +1,43 @@
+{
+  "created_utc": "2026-10-11T22:01:26.634963+00:00",
+  "python": "3.11.4 (tags/v3.11.4:d2340ef, Jun  7 2023, 05:45:37) [MSC v.1934 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+  "libraries": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "qiskit": "2.5.2",
+    "qiskit-aer": "0.17.2"
+  },
+  "backend": "local Aer CPU simulation",
+  "aer_threads": 1,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "depths": [
+    1,
+    2,
+    3
+  ],
+  "shots": 4096,
+  "restarts": 3,
+  "maxiter": 200,
+  "classical_repeats": 10,
+  "common_preprocessing_s": 0.21001979999709874,
+  "ising_max_error": 2.1316282072803006e-14,
+  "proxy_optimum": 2.8542,
+  "gps_coverage_optimum": 1075,
+  "input_sha256": {
+    "data/candidate_sites.csv": "22801e2abaa020670713d79e87f128786beda4478eb9633648d4177f03305949",
+    "data/elephant_gps_raw.csv": "5c3452b70bd8a9722589621d81a3bac74645a2dba4d2598af8aa42c486a908f8",
+    "data/qubo_c.npy": "0f7fa3733f3391d5cd6f3c0f38970848bdb01abccf5442108d9d95be6d4bd665",
+    "data/qubo_Q.npy": "c7c2146b46dcd1787bf4b49409edd836ddd1ae5855067394a294b14da03ed33a",
+    "data/qubo_params.txt": "e921bd9d2919e89533ad01a9a21d7923b732951079066a587509c465b7196f60"
+  },
+  "timing_scope": "Solver-only wall clock after common input preparation. Hybrid includes Hamiltonian construction, ansatz, optimizer, sampling, full sample selection, selected-placement repair and evaluation. Reference enumeration and correctness checks excluded from all solver timings. Entire-distribution diagnostic repair and artifact I/O excluded.",
+  "limitations": "Three seeds are descriptive, not statistical evidence of advantage. Single machine and one instance. Classical coverage and quantum proxy have different objectives. Common preprocessing, imports, reference construction, and I/O are not end-to-end deployment timings."
+}

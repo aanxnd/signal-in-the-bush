@@ -31,6 +31,8 @@ SHOTS = 4096
 REPS_LIST = [1, 2, 3]
 RANDOM_RESTARTS = 3
 SEED = 42
+MAX_ITERATIONS = 200
+AER_THREADS = 1
 
 
 def qubo_to_ising(c, Q, A, k):
@@ -87,31 +89,47 @@ def build_hamiltonian(h, J, const, n):
 
 
 def run_qaoa_depth(hamiltonian, n, reps, shots=SHOTS, seed=SEED):
+    t0 = time.perf_counter()
     ansatz = QAOAAnsatz(cost_operator=hamiltonian, reps=reps).decompose(reps=4)
-    estimator = AerEstimator()
+    estimator = AerEstimator(options={"backend_options": {"max_parallel_threads": AER_THREADS}})
     rng = np.random.default_rng(seed)
+
+    history = []
 
     def cost_fn(params):
         job = estimator.run([(ansatz, hamiltonian, params)])
-        return float(job.result()[0].data.evs)
+        value = float(job.result()[0].data.evs)
+        history.append(value)
+        return value
 
     best_val, best_params = np.inf, None
-    t0 = time.time()
+    restart_logs = []
     for r in range(RANDOM_RESTARTS):
         x0 = rng.uniform(-np.pi, np.pi, ansatz.num_parameters)
-        res = minimize(cost_fn, x0, method="COBYLA", options={"maxiter": 200})
+        history = []
+        restart_start = time.perf_counter()
+        res = minimize(cost_fn, x0, method="COBYLA", options={"maxiter": MAX_ITERATIONS})
+        restart_logs.append(dict(restart=r, success=bool(res.success), status=int(res.status),
+            message=str(res.message), evaluations=int(res.nfev), final_energy=float(res.fun),
+            initial_parameters=x0.tolist(), final_parameters=res.x.tolist(),
+            energy_history=list(history), wall_time_s=time.perf_counter() - restart_start))
         if res.fun < best_val:
             best_val, best_params = res.fun, res.x
-    opt_time = time.time() - t0
+    opt_time = time.perf_counter() - t0
 
     bound = ansatz.assign_parameters(best_params)
     bound.measure_all()
-    sampler = AerSampler(seed=seed)
+    sampler = AerSampler(seed=seed, options={"backend_options": {"max_parallel_threads": AER_THREADS}})
     job = sampler.run([bound], shots=shots)
     counts = job.result()[0].data.meas.get_counts()
-    total_time = time.time() - t0
+    total_time = time.perf_counter() - t0
 
-    return best_val, counts, opt_time, total_time
+    convergence = dict(optimizer="COBYLA", maxiter=MAX_ITERATIONS, restarts=restart_logs,
+        all_restarts_converged=all(item["success"] for item in restart_logs),
+        best_parameters=best_params.tolist(), parameter_order=[str(v) for v in ansatz.parameters],
+        estimator="Aer EstimatorV2 exact expectation (default precision 0)", aer_threads=AER_THREADS,
+        shots=shots, seed=seed, depth=reps, timing_scope="circuit construction + optimization + final sampling")
+    return best_val, counts, opt_time, total_time, convergence
 
 
 def main():
@@ -152,10 +170,10 @@ def main():
 
     for p in REPS_LIST:
         print(f"Running p={p}, {SHOTS} shots", flush=True)
-        best_val, counts, opt_time, total_time = run_qaoa_depth(hamiltonian, n, p)
+        best_val, counts, opt_time, total_time, convergence = run_qaoa_depth(hamiltonian, n, p)
         summary = summarize_samples(counts, c, Q, k, A, site_ids, val_exact, SHOTS)
         summary.update(p=p, qubits=n, budget=k, penalty_A=A, backend="local qiskit Aer SamplerV2",
-            sampling_seed=SEED, optimizer_seed=SEED, random_restarts=RANDOM_RESTARTS,
+            convergence=convergence, sampling_seed=SEED, optimizer_seed=SEED, random_restarts=RANDOM_RESTARTS,
             optimizer_expected_energy=best_val, opt_time_s=opt_time, total_time_s=total_time,
             input_sha256={name: hashlib.sha256(Path(name).read_bytes()).hexdigest()
                 for name in ("data/candidate_sites.csv", "data/qubo_c.npy", "data/qubo_Q.npy", "data/qubo_params.txt")})

@@ -6,6 +6,15 @@ Qollab × IonQ Hackathon — Quantum Impact Track
 
 ## 0. Status
 
+**Repeated benchmarks (stage 7):** classical exact GPS coverage averages 17.8 ms
+and greedy 4.9 ms (10 repeats). Local hybrid QAOA averages 14.9/50.9/66.4 seconds
+at depths 1/2/3 (3 seeds each), covering 883 fixes versus exact coverage 1,075.
+Proxy scores and GPS coverage are reported separately; optimizer limits and
+variation are retained. Canonical samples and repair outputs were regenerated.
+See [`docs/BENCHMARK_RESULTS.md`](docs/BENCHMARK_RESULTS.md) and
+[`docs/BENCHMARKING.md`](docs/BENCHMARKING.md) for standard deviations, configuration,
+and timing boundaries. Older metrics below are superseded. The map update is next.
+
 **Budget repair (stage 6):** raw and repaired selected/modal placements and full
 sample distributions are evaluated against both reference optima. The selected
 [0,1,2] placement already uses three sensors and stays unchanged: 883 fixes,

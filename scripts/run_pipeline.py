@@ -14,8 +14,10 @@ def main():
         ("extract_pinch_points.py", ("data/candidate_sites.csv", "data/dwell_sites_context.csv")),
         ("build_qubo.py", ("data/qubo_c.npy", "data/qubo_Q.npy", "data/qubo_params.txt",
                            "data/coverage_baselines.json", "data/coverage_sets.npz", "data/coverage_demand.csv")),
-        ("run_qaoa.py", tuple(f"data/qaoa_result_p{p}.{extension}" for p in (1, 2, 3)
-                              for extension in ("txt", "json"))),
+        ("benchmark_pipeline.py" if "--benchmark" in sys.argv else "run_qaoa.py",
+         tuple(f"data/qaoa_result_p{p}.{extension}" for p in (1, 2, 3)
+               for extension in ("txt", "json"))
+         + (("data/benchmark_metrics.csv", "docs/BENCHMARK_RESULTS.md") if "--benchmark" in sys.argv else ())),
         ("repair_qaoa.py", tuple(name for p in (1, 2, 3) for name in
                                 (f"data/qaoa_repair_p{p}.json", f"data/qaoa_repair_samples_p{p}.csv"))),
         ("build_demo_map.py", ("demo/map.html",)),
