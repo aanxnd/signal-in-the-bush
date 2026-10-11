@@ -11,6 +11,9 @@ import sys
 import time
 import itertools
 import ast
+import json
+import hashlib
+from pathlib import Path
 
 import numpy as np
 from scipy.optimize import minimize
@@ -20,7 +23,9 @@ from qiskit_aer.primitives import EstimatorV2 as AerEstimator
 from qiskit_aer.primitives import SamplerV2 as AerSampler
 
 sys.path.insert(0, "scripts")
-from build_qubo import proxy_objective, brute_force_proxy, load_sites
+from build_qubo import (proxy_objective, brute_force_proxy, load_sites,
+                        distance_matrix, build_overlap_matrix, R_METERS, K_BUDGET)
+from qaoa_samples import decode_bitstring, summarize_samples
 
 SHOTS = 4096
 REPS_LIST = [1, 2, 3]
@@ -101,17 +106,12 @@ def run_qaoa_depth(hamiltonian, n, reps, shots=SHOTS, seed=SEED):
 
     bound = ansatz.assign_parameters(best_params)
     bound.measure_all()
-    sampler = AerSampler()
+    sampler = AerSampler(seed=seed)
     job = sampler.run([bound], shots=shots)
     counts = job.result()[0].data.meas.get_counts()
     total_time = time.time() - t0
 
     return best_val, counts, opt_time, total_time
-
-
-def decode_bitstring(bitstring, n):
-    bitstring = bitstring.replace(" ", "")
-    return np.array([int(bitstring[n - 1 - i]) for i in range(n)])
 
 
 def main():
@@ -127,9 +127,12 @@ def main():
     site_ids = ast.literal_eval(params["site_ids"])
     current_sites = load_sites()
     if (site_ids != current_sites["site_id"].tolist()
+            or k != K_BUDGET or not np.isclose(float(params["r"]), R_METERS)
+            or not np.isfinite(A) or A < 0
             or c.shape != (len(current_sites),)
             or Q.shape != (len(current_sites), len(current_sites))
-            or not np.allclose(c, current_sites["weight_c_i"].to_numpy())):
+            or not np.allclose(c, current_sites["weight_c_i"].to_numpy())
+            or not np.allclose(Q, build_overlap_matrix(distance_matrix(current_sites)))):
         raise ValueError("Saved QUBO does not match current candidates; rerun build_qubo.py before QAOA.")
     n = len(c)
 
@@ -139,7 +142,7 @@ def main():
     max_err = validate_ising(c, Q, A, k, h, J, const, n)
     print(f"Ising validation vs brute-force proxy objective: max error = {max_err:.2e} ({'PASS' if max_err < 1e-8 else 'FAIL -- DO NOT TRUST RESULTS BELOW'})")
     if max_err >= 1e-8:
-        return
+        raise ValueError("QUBO/Ising validation failed.")
 
     x_exact, val_exact = brute_force_proxy(c, Q, k, A)  # val_exact = f(x), the thing we actually maximize
     print(f"Exact proxy optimum: sites {np.array(site_ids)[x_exact == 1].tolist()}, f(x)={val_exact:.4f}")
@@ -147,21 +150,27 @@ def main():
     hamiltonian = build_hamiltonian(h, J, const, n)
     print(f"Hamiltonian: {len(hamiltonian)} Pauli terms, {n} qubits")
 
-    print(f"\n{'p':>3} {'sampled_f(x)':>13} {'approx_ratio':>13} {'opt_time_s':>11} {'total_time_s':>12}  best_bitstring_sites")
     for p in REPS_LIST:
+        print(f"Running p={p}, {SHOTS} shots", flush=True)
         best_val, counts, opt_time, total_time = run_qaoa_depth(hamiltonian, n, p)
-        top_bitstring = max(counts, key=counts.get)
-        x_sampled = decode_bitstring(top_bitstring, n)
-        sampled_f = proxy_objective(x_sampled, c, Q, k, A)  # same direction as val_exact -- bounded, interpretable
-        approx_ratio = sampled_f / val_exact if val_exact != 0 else float("nan")
-        sites = np.array(site_ids)[x_sampled == 1].tolist()
-        print(f"{p:>3} {sampled_f:>13.4f} {approx_ratio:>13.1%} {opt_time:>11.2f} {total_time:>12.2f}  {sites}")
-
-        with open(f"data/qaoa_result_p{p}.txt", "w") as f:
-            f.write(f"p={p}\nshots={SHOTS}\nbest_bitstring={top_bitstring}\nsites={sites}\n")
-            f.write(f"sampled_f={sampled_f}\nexact_f={val_exact}\napprox_ratio={approx_ratio}\n")
-            f.write(f"opt_time_s={opt_time}\ntotal_time_s={total_time}\n")
-            f.write(f"counts={dict(counts)}\n")
+        summary = summarize_samples(counts, c, Q, k, A, site_ids, val_exact, SHOTS)
+        summary.update(p=p, qubits=n, budget=k, penalty_A=A, backend="local qiskit Aer SamplerV2",
+            sampling_seed=SEED, optimizer_seed=SEED, random_restarts=RANDOM_RESTARTS,
+            optimizer_expected_energy=best_val, opt_time_s=opt_time, total_time_s=total_time,
+            input_sha256={name: hashlib.sha256(Path(name).read_bytes()).hexdigest()
+                for name in ("data/candidate_sites.csv", "data/qubo_c.npy", "data/qubo_Q.npy", "data/qubo_params.txt")})
+        Path(f"data/qaoa_result_p{p}.json").write_text(json.dumps(summary, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+        mode = summary["mode"]
+        best = summary["best_feasible_sample"]
+        print(f"p={p}: mode={mode['sites']}, best feasible={best['sites'] if best else None}; feasible={summary['feasible_rate']:.2%}, optimal={summary['proxy_optimal_rate']:.2%}", flush=True)
+        # Retain text outputs for existing consumers, with explicit selection semantics.
+        with open(f"data/qaoa_result_p{p}.txt", "w", encoding="utf-8") as f:
+            f.write(f"p={p}\nshots={SHOTS}\nselection_rule={summary['selection_rule']}\n")
+            f.write(f"mode_bitstring={mode['bitstring']}\nmode_sites={mode['sites']}\n")
+            f.write(f"selected_bitstring={best['bitstring'] if best else None}\nsites={best['sites'] if best else None}\n")
+            f.write(f"sampled_f={best['penalized_proxy_score'] if best else None}\nexact_f={val_exact}\n")
+            f.write(f"feasible_rate={summary['feasible_rate']}\nproxy_optimal_rate={summary['proxy_optimal_rate']}\n")
+            f.write(f"opt_time_s={opt_time}\ntotal_time_s={total_time}\ncounts={dict(counts)}\n")
 
 
 if __name__ == "__main__":

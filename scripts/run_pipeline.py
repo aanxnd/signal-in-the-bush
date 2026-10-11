@@ -14,7 +14,8 @@ def main():
         ("extract_pinch_points.py", ("data/candidate_sites.csv", "data/dwell_sites_context.csv")),
         ("build_qubo.py", ("data/qubo_c.npy", "data/qubo_Q.npy", "data/qubo_params.txt",
                            "data/coverage_baselines.json", "data/coverage_sets.npz", "data/coverage_demand.csv")),
-        ("run_qaoa.py", tuple(f"data/qaoa_result_p{p}.txt" for p in (1, 2, 3))),
+        ("run_qaoa.py", tuple(f"data/qaoa_result_p{p}.{extension}" for p in (1, 2, 3)
+                              for extension in ("txt", "json"))),
         ("build_demo_map.py", ("demo/map.html",)),
     ):
         print(f"\nRunning {script}", flush=True)

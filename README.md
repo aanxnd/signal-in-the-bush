@@ -6,6 +6,13 @@ Qollab × IonQ Hackathon — Quantum Impact Track
 
 ## 0. Status
 
+**Sampling update (stage 5):** local Aer results now use the corrected 15-site
+instance and explicitly distinguish mode from best feasible sampled output.
+Full distributions and sampling rates are in `data/qaoa_result_p*.json`;
+see [`docs/QAOA_SELECTION.md`](docs/QAOA_SELECTION.md). Old eight-site quantum
+figures below are superseded. Budget repair and coverage evaluation of quantum
+outputs are the next stage.
+
 **Conservation review (stage 4):** single-animal evidence covers 2008–2010.
 The 400 m radius is an assumed monitoring zone, not ordinary camera-trap range;
 0.5 km/h is a heuristic movement split. Long gaps have unknown movement state.
