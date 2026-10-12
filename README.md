@@ -1,5 +1,7 @@
 # Signal in the Bush
 
+Cross Posted on qollab.xyz: https://qollab.xyz/u/aanxnd/signal-in-the-bush.
+
 A hybrid quantum-classical experiment that uses real elephant GPS observations to compare sensor placements selected by QAOA and classical coverage algorithms.
 
 **Theme: Quantum Impact**
