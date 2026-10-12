@@ -28,6 +28,8 @@ The experiment offers a transparent way to investigate limited monitoring resour
 
 [README.md](README.md) contains setup, model, results, limitations, and artifact locations. [TASKS.md](TASKS.md) records completion states. [Map guide](docs/DEMO_MAP.md) explains all controls. [Video script](demo/VIDEO_SCRIPT.md) is ready for recording but is not a recorded video. The repository is [aanxnd/signal-in-the-bush](https://github.com/aanxnd/signal-in-the-bush).
 
+The [Qollab package](docs/QOLLAB.md) provides archived comparisons, freshly recomputed classical coverage, and a live measurement button using previously optimized QAOA parameters. Live sampling is separate from the full local optimization benchmark. The initial upload ran with blocked map tiles; the corrected self-contained map still needs confirmed on-platform execution and public verification.
+
 ## Disclosure
 
 - **Data:** Wall et al. (2014), Movebank Data Repository, doi:10.5441/001/1.f321pf80, CC0 1.0. Full citations and original package terms are linked in the README.

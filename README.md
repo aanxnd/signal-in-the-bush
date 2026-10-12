@@ -6,7 +6,7 @@ A hybrid quantum-classical experiment that uses real elephant GPS observations t
 
 *This effort is supported by Qollab & IonQ.*
 
-The local prototype is implemented and tested. Computation uses **Qiskit Aer on a local CPU**, not IonQ hardware or Qollab's IonQ simulator. The required IonQ simulator run has been deferred; public project verification and the demo video remain submission tasks. See [submission summary](SUBMISSION.md) and [stage checklist](MASTER_TASKS.md).
+The local prototype is implemented and tested. Computation uses **Qiskit Aer on a local CPU**, not IonQ hardware or Qollab's IonQ simulator. The required IonQ simulator run has been deferred; public project verification and the demo video remain submission tasks. See [submission summary](SUBMISSION.md) and [stage checklist](TASKS.md).
 
 ## What it does
 
@@ -58,7 +58,7 @@ The normal pipeline runs one seed per depth; `--benchmark` runs seeds 42, 43, an
 
 ## Qollab upload package
 
-Run `scripts/package_qollab.py` to create `dist/signal-in-the-bush-qollab.zip`, then upload the ZIP through Qollab's Code → Browse → Files. It contains a visual browser entry, archived comparisons, and fresh backend measurement using previously optimized QAOA parameters. It does not repeat optimization in the browser. See [Qollab guide and verification status](docs/QOLLAB.md). The package is locally tested; on-platform upload/run and public verification are still pending.
+Run `scripts/package_qollab.py` to create `dist/signal-in-the-bush-qollab.zip`, then upload the ZIP through Qollab's Code → Browse → Files. It contains a visual browser entry, archived comparisons, and fresh backend measurement using previously optimized QAOA parameters. It does not repeat optimization in the browser. See [Qollab guide and verification status](docs/QOLLAB.md). The initial Qollab upload ran but its online map tiles were blocked. The replacement package uses a self-contained map and is locally tested; its on-platform run and public verification remain unconfirmed.
 
 ## Data and assumptions
 
@@ -91,7 +91,7 @@ The quantum circuit uses one qubit per candidate. It optimizes the negative of `
 
 Local Aer uses exact expectation values during COBYLA optimization, three restarts, at most 200 evaluations per restart, one simulation thread, and 4,096 final measurement shots. The selected answer is the best feasible **observed** penalized proxy score, with ties by frequency and then bitstring. The most frequent answer is reported separately. No feasible sample produces a null selection, not a substituted classical optimum.
 
-Classical repair trims the site with least GPS coverage loss or fills with greatest positive gain, breaking ties by site ID. Exactly-budget placements are unchanged. Repair is not a replacement search for the classical optimum. See [sample selection](docs/QAOA_SELECTION.md) and [repair](docs/BUDGET_REPAIR.md).
+Classical repair trims the site with least GPS coverage loss or fills with greatest positive gain, breaking ties by site ID. Exactly-budget placements are unchanged. Repair is not a replacement search for the classical optimum. See the [methods guide](docs/METHODS.md) for candidate geometry, coverage, sample selection, and repair.
 
 ## Verified results
 
@@ -126,6 +126,15 @@ All depth-1 benchmark runs had all optimizer restarts converge. No depth-2/3 run
 | `tests/` | Regression tests for geometry, movement, coverage, samples, repair, benchmarks, map |
 
 Generated reports record input hashes. Downstream checks reject mismatched inputs rather than silently presenting stale results. `demo/map_data.json` exposes plotted coordinates and selections. `data/benchmarks/config.json` records versions, platform, seeds, and timing scope. Reproduction across platforms or future package versions is not guaranteed bit-for-bit.
+
+## Documentation
+
+- [Methods](docs/METHODS.md): candidate extraction, coverage, QAOA selection, and repair.
+- [Conservation validation](docs/CONSERVATION_VALIDATION.md): data quality, assumptions, sensitivity, and landmark checks.
+- [Benchmark methodology](docs/BENCHMARKING.md) and [generated results](docs/BENCHMARK_RESULTS.md): experiment configuration, timing scope, and measured outcomes.
+- [Map walkthrough](docs/DEMO_MAP.md) and [Qollab guide](docs/QOLLAB.md): interactive controls and browser submission package.
+- [Validation](docs/VALIDATION.md): reproduction and source checks.
+- [Submission summary](SUBMISSION.md), [completion checklist](TASKS.md), and [video script](demo/VIDEO_SCRIPT.md): submission material and remaining work.
 
 ## Attribution and license
 

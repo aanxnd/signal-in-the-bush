@@ -1,4 +1,4 @@
-﻿# Qollab runnable package
+# Qollab runnable package
 
 Build from the repository root:
 
@@ -16,10 +16,10 @@ Choose the **built-in local simulator** for the initial test. Choose depth 1/2/3
 
 The original 7.2 MB CSV is included losslessly as data/elephant_gps_raw.csv.gz. It is not downloaded from an external service. Full extraction, optimization, conservation sensitivity, and repeated benchmarks are reproducible locally via the repository. The browser demonstration uses the verified saved matrix and previously optimized parameters to provide a practical interactive judging experience.
 
-## Verification and current blocker
+## Verification status
 
 The archive passed limits and lossless raw-data roundtrip checks. Native Qiskit BasicSimulator tested the packaged live circuit; the main regression suite also covers archive limits, classical recomputation, invalid settings, and tampered inputs. The initial uploaded project initialized on Qollab, but OpenStreetMap rejected its background tile requests with HTTP 403. The corrected map embeds its libraries and public-domain boundaries, uses no online tiles, and was visually tested in a sandbox with external resources blocked. The corrected upload still needs its on-platform run/public verification.
 
-Automated upload is currently blocked because the ChatGPT Chrome extension does not have **Allow access to file URLs** enabled. No file was uploaded by the failed attempt. Upload the prepared ZIP manually through Browse → Files, or explicitly authorize/enable that extension setting, then continue the on-platform run and visual checks. A local test does not establish a successful Qollab run. Stage 11 remains open until upload, publication, and public runnable verification are complete.
+Upload the corrected ZIP through **Browse → Files**, replace the previous project files, then stop and rerun the project. A local test does not establish a successful corrected Qollab run. Public runnable verification remains open until the updated project is published and tested from a logged-out session.
 
 Before public verification, confirm the updated Project Card retains the theme, Qollab/IonQ attribution, data/library/AI disclosures, repository link, accurate backend statement, and eventual video link. Publishing this demonstration does not complete the deferred full IonQ experiment or the video requirement.

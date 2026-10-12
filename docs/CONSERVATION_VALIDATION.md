@@ -50,7 +50,7 @@ instead of being silently repaired. This dataset has no such failures.
 - Maximum step speed 6.468 km/h; none exceeds 7 km/h.
 - Four gaps exceed 3 hours; the longest is 110 hours.
 - Five fixes have unknown movement state (first fix plus four gap endpoints).
-- Default transit count is now 7,065; all-fix coverage demand remains 21,972.
+- Default transit count is 7,065; all-fix coverage demand remains 21,972.
 
 At gap limits of 1/3/6/24 hours the unknown counts are 30/5/5/2 and transit
 counts are 7,061/7,065/7,065/7,066. A long-gap mean speed cannot reveal whether
@@ -86,10 +86,7 @@ numerical site weight or guaranteed year-round access.
 
 The [GeoNames wetland entry](https://www.geonames.org/advanced-search.html?country=ML&featureClass=H&q=&startRow=250)
 places Oualet Benzena approximately at (15.663, -2.5878). This is a gazetteer
-point, not a surveyed shoreline. The historical centroid from commit `b097931`
-at (15.592857, -2.594564) is 7.83 km away, broadly corroborating the old ~8 km
-distance only. Even that is far beyond a 400 m zone and cannot establish lake
-coverage. The nearest current site is site 13, **34.90 km** from the approximate
+point, not a surveyed shoreline. The nearest current site is site 13, **34.90 km** from the approximate
 point. No current candidate gets a Lake Banzena label or boost.
 
 `data/landmark_boost_sensitivity.csv` deliberately tests a hypothetical boost
@@ -116,7 +113,7 @@ candidate sites for the sensitivity scenarios. Movement regression tests cover u
 validate the implementation and expose assumptions; they do not validate a
 field-ready anti-poaching system.
 
-## Follow-up audit
+## Evidence checks
 
 Regression checks also cover duplicate event IDs and empty clustering/context inputs. The quality report now records the actual
 classification constants and invalid-coordinate count. Landmark output records
@@ -125,5 +122,4 @@ coordinates and local support for every scenario; the sensitivity summary also
 saves proxy selections. This makes the reported scenario IDs independently
 reconstructible. An independent sklearn haversine calculation and exhaustive
 enumeration reproduced every scenario's optimum, proxy count, and candidate
-union, as well as the landmark distance and candidate hash. Scientific conclusions
-and default coverage are unchanged. Syntax and whitespace checks pass.
+union, as well as the landmark distance and candidate hash. These checks verify saved calculations, not field effectiveness.

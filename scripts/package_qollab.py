@@ -66,7 +66,7 @@ def main():
         "data/elephant_gps_raw.csv.gz",
         gzip.compress((ROOT / "data/elephant_gps_raw.csv").read_bytes(), mtime=0),
     )
-    for name in ("LICENSE", "SUBMISSION.md", "MASTER_TASKS.md", "TASKS.md"):
+    for name in ("LICENSE", "SUBMISSION.md", "TASKS.md"):
         copy(ROOT / name)
     copy(ROOT / "README.md", "LOCAL_README.md")
     copy(ROOT / "requirements.txt", "requirements-local.txt")

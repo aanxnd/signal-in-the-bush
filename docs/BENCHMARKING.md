@@ -93,14 +93,9 @@ runs still produced measured samples, and those results are retained as observed
 
 Classical exact GPS coverage and greedy each cover 1,075 observations. Their
 mean times are approximately 17.8 ms and 4.9 ms; proxy exact enumeration averages
-268 ms. These measurements replace the older unsupported microsecond claim.
-The classical algorithm is much faster at this instance size. Larger depth
+268 ms. The classical algorithm is much faster at this instance size. Larger depth
 does not establish a reliable quality improvement from these three seeds.
 
-Regression tests include a two-qubit repeated-seed sampling check and convergence-history checks. `validate_benchmarks.py` passes for all nine trials;
-current seed-42 repair outputs were regenerated. A summary-only path error was
-fixed and the final summary regenerated successfully from the raw trial files.
-Syntax and whitespace checks pass. No repeated benchmark is inferred from
-the older single-run timing values.
+Regression tests include a two-qubit repeated-seed sampling check and convergence-history checks. Summary regeneration uses saved trial files without new optimization. See [validation commands](VALIDATION.md).
 
 Saved-evidence validation reconstructs GPS coverage, recomputes exact references, checks each configured seed and classical repeat, and verifies rates, selected repairs, convergence logs, and aggregate means/sample standard deviations. Validation uses explicit exceptions and also runs under optimized (`-O`) Python. Regression tests reject missing/duplicate seeds and corrupted summaries.

@@ -1,4 +1,4 @@
-# Generated results map (stage 8)
+# Interactive results map
 
 Run `.venv/Scripts/python.exe scripts/build_demo_map.py` from the repository root, then open `demo/map.html`. The map is self-contained: Leaflet/jQuery and approximate Natural Earth country boundaries are embedded; no online tiles or CDN downloads are needed. The normal pipeline also rebuilds this map.
 
@@ -19,7 +19,7 @@ The accessible text table exposes all selections and covered observation counts 
 
 The trail uses observed dates and is downsampled within segments; gaps over three hours are not connected. Banzena is an optional approximate gazetteer reference, never a selected candidate. The 400 m radius is an assumed monitoring zone, not a camera hardware specification. Coverage counts observations of one elephant; no quantum advantage is claimed.
 
-Verification: generated successfully; Chrome rendered tiles, trail, rings, table, and named controls. Toggling the p=3 raw layer changed its checked state and removed its rings. The accessibility tree exposed all seven result rows and named layer checkboxes. Stage 8 audit/debug complete: all 37 unit tests passed. Regression checks cover saved-selection linkage, stale and missing provenance, corrupted coverage counts, and missing feasible samples. The audit also fixed hardcoded backend captions, distinguished valid empty selections from missing samples, validated budget and coverage counts against the saved matrix, and added the JSON manifest to pipeline freshness checks. Chrome confirmed named marker buttons and keyboard Enter collapsing the results disclosure. Basic accessibility was checked; full WCAG certification was not performed.
+Regression checks verify saved-selection linkage, input provenance, coverage counts, feasible-sample handling, and the absence of external map resources. Chrome checks confirmed named controls and keyboard operation of the comparison disclosure.
 
 ## Embedded-runtime fix
 

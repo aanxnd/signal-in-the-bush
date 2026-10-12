@@ -1,19 +1,18 @@
-# Project tasks
+# Project status and completion checklist
 
-The implemented local pipeline is complete through stage 8; stage 10 documentation and code cleanup are complete. Stage 9 is deferred at the user's request. This is not a completed submission. [MASTER_TASKS.md](MASTER_TASKS.md) is the stage checklist.
+Stages 1-8 and 10 are complete for the local prototype. Stage 9 is deferred at the user's request; stages 11-12 remain open. The project is not yet ready to claim a completed competition submission.
 
-| Area | Status | Evidence |
-|---|---|---|
-| Python 3.11 environment and fail-fast runner | Complete | requirements.txt, scripts/run_pipeline.py |
-| Observed-location candidates and movement quality | Complete | docs/CANDIDATE_GEOMETRY.md, docs/CONSERVATION_VALIDATION.md |
-| Exact/greedy GPS coverage and proxy comparison | Complete | data/coverage_baselines.json, docs/COVERAGE_BASELINE.md |
-| Seeded local Aer QAOA and explicit sample selection | Complete | data/qaoa_result_p*.json, docs/QAOA_SELECTION.md |
-| Classical budget repair and raw/repaired evaluation | Complete | data/qaoa_repair_p*.json, docs/BUDGET_REPAIR.md |
-| Repeated timing, convergence, and evidence checks | Complete | data/benchmarks/, docs/BENCHMARK_RESULTS.md |
-| Generated interactive map and accessibility checks | Complete | demo/map.html, docs/DEMO_MAP.md |
-| Current documentation, attribution, and source cleanup | Complete | README.md, SUBMISSION.md, docs/CODE_QUALITY.md |
-| Required Qollab/IonQ simulator execution | Deferred; not run | Local Aer only; stage 9 remains open |
-| Public runnable Qollab project and logged-out verification | Package prepared and locally tested; upload/run/public verification pending | Stage 11, docs/QOLLAB.md |
-| Recorded/attached video and final submission check | Open | Stage 12; script only |
+1. [x] Reproducible Python 3.11 execution, pinned dependencies, and fail-fast pipeline. Evidence: docs/VALIDATION.md.
+2. [x] Observed-location candidate geometry, local support, and 15-site cap. Evidence: docs/METHODS.md#candidate-geometry.
+3. [x] Actual GPS observation coverage, exact/greedy references, and separate proxy comparison. Evidence: docs/METHODS.md#gps-observation-coverage.
+4. [x] Conservation assumptions, movement quality, radius/threshold/gap sensitivity, and landmark validation. Banzena boost disabled. Evidence: docs/CONSERVATION_VALIDATION.md.
+5. [x] Seeded local Aer QAOA, explicit measured-answer selection, complete counts, and sampling metrics. Evidence: docs/METHODS.md#qaoa-execution-and-sample-selection.
+6. [x] Classical budget repair, preserved raw results, action logs, and both objective metrics. Evidence: docs/METHODS.md#classical-budget-repair.
+7. [x] Ten classical repeats, three seeds per QAOA depth, scoped timings, convergence evidence, and saved-trial validation. Evidence: docs/BENCHMARKING.md and docs/BENCHMARK_RESULTS.md.
+8. [x] Generated-results map, distinct placement/range layers, accurate landmark labels, Chrome rendering, and basic accessibility checks. Evidence: docs/DEMO_MAP.md.
+9. [ ] Required Qollab/IonQ simulator execution and backend/job/configuration/timing/results evidence. **Deferred; the recorded full benchmark uses local Aer.**
+10. [x] Reconcile all project documentation, completion states, data/library/AI disclosures, and video narration with verified results; audit and clean source code. Evidence: README.md, SUBMISSION.md, demo/VIDEO_SCRIPT.md, docs/VALIDATION.md.
+11. [ ] Publish or update a runnable public Qollab project with replication instructions, theme, attribution/disclosures, repository link, and accurate backend statement; verify from a logged-out browser. The initial Qollab upload ran but its online map tiles were blocked. A self-contained replacement package is locally tested; corrected on-platform execution and logged-out public verification remain unconfirmed. See [Qollab guide](docs/QOLLAB.md).
+12. [ ] Record and attach the two-minute demo video, verify required links/artifacts, and complete the final submission check.
 
-The sequential local workflow is extraction → coverage/QUBO → QAOA → repair → map. Repeated benchmarks optionally replace the single-seed QAOA step. Conservation sensitivity is a separate diagnostic command. No mock-data harness or pending branch merge is needed for the current pipeline.
+Skipping stage 9 does not satisfy its execution requirement. Before submission, update backend/results statements only from retained evidence and review the current competition requirements.

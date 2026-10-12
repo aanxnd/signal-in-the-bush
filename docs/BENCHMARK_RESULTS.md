@@ -1,6 +1,6 @@
 # Repeated local benchmark results
 
-All timings are seconds, mean +/- sample standard deviation. See BENCHMARKING.md for scope and limitations.
+All timings are seconds, mean +/- sample standard deviation. See [benchmark methodology](BENCHMARKING.md) for scope and limitations.
 
 | Method | Depth | Runs | Time (s) | Covered fixes | Coverage / exact |
 |---|---|---|---|---|---|
