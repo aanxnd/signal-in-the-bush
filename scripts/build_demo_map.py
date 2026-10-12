@@ -102,9 +102,61 @@ def main():
     m = folium.Map(
         location=[trail["location-lat"].mean(), trail["location-long"].mean()],
         zoom_start=8,
-        tiles="OpenStreetMap",
+        tiles=None,
         control_scale=True,
     )
+    # Bundle geography and libraries: sandboxed embeds cannot rely on public tiles.
+    m.default_js = []
+    m.default_css = []
+    assets = Path("demo/assets")
+    for name in ("leaflet.js", "jquery.min.js"):
+        m.get_root().header.add_child(
+            folium.Element("<script>" + (assets / name).read_text(encoding="utf-8") + "</script>")
+        )
+    m.get_root().header.add_child(
+        folium.Element(
+            "<style>"
+            + (assets / "leaflet.css").read_text(encoding="utf-8")
+            + ".leaflet-container{background:#edf0e8}.leaflet-control-layers-toggle{background-image:none}</style>"
+        )
+    )
+    countries = json.loads(Path("data/basemap_countries.geojson").read_text(encoding="utf-8"))
+    folium.GeoJson(
+        countries,
+        name="Country boundaries (bundled, approximate)",
+        style_function=lambda feature: dict(
+            color="#a6b6a0", weight=1, fillColor="#f5f4e9", fillOpacity=1
+        ),
+        tooltip=folium.GeoJsonTooltip(fields=["ADMIN"], aliases=["Country:"]),
+    ).add_to(m)
+    for feature in countries["features"]:
+        props = feature["properties"]
+        folium.Marker(
+            [props["LABEL_Y"], props["LABEL_X"]],
+            icon=folium.DivIcon(
+                html=f'<span style="font:13px sans-serif;color:#62745e;white-space:nowrap">{html.escape(props["ADMIN"])}</span>'
+            ),
+        ).add_to(m)
+    south, north = trail["location-lat"].min(), trail["location-lat"].max()
+    west, east = trail["location-long"].min(), trail["location-long"].max()
+    m.fit_bounds([[south, west], [north, east]], padding=(35, 35))
+    grid = folium.FeatureGroup(name="Latitude/longitude grid", show=True).add_to(m)
+    for latitude in np.arange(np.floor(south) - 1, np.ceil(north) + 1, 0.5):
+        folium.PolyLine(
+            [[latitude, west - 1], [latitude, east + 1]],
+            color="#c4cdbf",
+            weight=0.6,
+            tooltip=f"Latitude {latitude:g}°",
+            interactive=False,
+        ).add_to(grid)
+    for longitude in np.arange(np.floor(west) - 1, np.ceil(east) + 1, 0.5):
+        folium.PolyLine(
+            [[south - 1, longitude], [north + 1, longitude]],
+            color="#c4cdbf",
+            weight=0.6,
+            tooltip=f"Longitude {longitude:g}°",
+            interactive=False,
+        ).add_to(grid)
     movement = folium.FeatureGroup(name="Observed GPS trail (downsampled)", show=True).add_to(m)
     groups = trail.timestamp.diff().dt.total_seconds().gt(3 * 3600).cumsum()
     for _, segment in trail.groupby(groups):
@@ -168,6 +220,9 @@ def main():
     )
     folium.Marker(
         [landmark["lat"], landmark["lon"]],
+        icon=folium.DivIcon(
+            html='<span style="background:white;border:2px solid #555;padding:3px">B</span>'
+        ),
         tooltip=label,
         popup=html.escape(label)
         + ' <a href="'
@@ -197,7 +252,7 @@ def main():
     Raw means the selected feasible measured sample, before repair. Compare each raw/repaired row to see whether repair changed the selection.</p>
     <p>{baseline["radius_m"]:g} m circles are assumed monitoring zones, not camera detection specifications.
     Coverage counts GPS observations, not animals. Green lines approximate movement; gaps over 3 hours are disconnected.
-    Banzena is an optional approximate reference, not a sensor site. No quantum advantage is demonstrated.</p></section>"""
+    Banzena is an optional approximate reference, not a sensor site. No quantum advantage is demonstrated.</p><p>Bundled boundaries: Natural Earth (public domain), approximate. No road or satellite imagery. Grid spacing: 0.5 degrees.</p></section>"""
     m.get_root().header.add_child(
         folium.Element("<title>Signal in the Bush — sensor placement results</title>")
     )

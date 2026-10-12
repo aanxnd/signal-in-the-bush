@@ -18,7 +18,7 @@ Reproduce source checks after installing the optional tools:
 .\.venv\Scripts\python.exe scripts/validate_benchmarks.py
 ```
 
-The current regression suite contains 37 tests. Saved benchmark validation checks all nine trials. Qiskit emits deprecation warnings from its pinned QAOAAnsatz dependencies; these do not fail the checks, and a future Qiskit migration should be treated as a separate behavioral change.
+The current regression suite contains 42 tests, including Qollab packaging and browser-entry checks. Saved benchmark validation checks all nine trials. Qiskit emits deprecation warnings from its pinned QAOAAnsatz dependencies; these do not fail the checks, and a future Qiskit migration should be treated as a separate behavioral change.
 
 After cleanup, extraction, baseline generation, conservation diagnostics, repair, map generation, and saved-benchmark validation were rerun in an isolated copy under `.verification/stage10_validation/`. Candidate bytes, baseline metrics, landmark/quality reports, QUBO coefficients, and all three repair reports matched the existing artifacts. Exhaustive validation of the full 15-qubit Ising conversion passed with maximum error 2.13e-14. The small repeated-seed circuit regression passed; the expensive nine-trial optimizer experiment was not repeated because circuit behavior and objective coefficients were unchanged. All 15 project Markdown documents passed local-link and encoding checks. `git diff --check` passed.
 

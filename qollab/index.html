@@ -1,0 +1,16 @@
+﻿<section class="app" aria-label="Signal in the Bush interactive experiment">
+  <header><div class="eyebrow">QUANTUM IMPACT · CONSERVATION EXPERIMENT</div><h1>Signal in the Bush</h1>
+    <p>Real elephant observations. Three monitoring sites. Classical coverage versus QAOA.</p></header>
+  <div class="notice">This effort is supported by Qollab &amp; IonQ. Saved benchmarks below ran on local Aer. A live measurement uses the backend you selected in Qollab.</div>
+  <section class="controls" aria-label="Live measurement controls">
+    <label>QAOA depth <select id="depth"><option value="1">1 — shortest circuit</option><option value="2">2</option><option value="3">3</option></select></label>
+    <label>Measurements <input id="shots" type="number" value="4096" min="128" max="8192" step="1"></label>
+    <button id="measure" disabled>Measure QAOA circuit</button><a id="download" hidden>Download live result JSON</a>
+  </section>
+  <p class="explanation">The button measures a QAOA circuit with parameters optimized previously on local Aer. It does not rerun the optimizer. One measurement job per project run; press Stop and Run to try another depth or backend.</p>
+  <p id="status" role="status" aria-live="polite">Loading verified inputs and recomputing classical coverage…</p>
+  <div class="metrics"><article><h2>Classical GPS optimum</h2><strong id="classical">—</strong><p id="classical-sites"></p></article><article><h2>Archived QAOA selections</h2><strong>883 fixes · 82.14%</strong><p>Sites 0, 1, 2 at all three depths. Selected repair unchanged.</p></article><article><h2>Fresh backend measurement</h2><strong id="live">Not measured</strong><p id="live-details">Fresh sampling can differ from saved results.</p></article></div>
+  <iframe id="map" title="Elephant movement and monitoring placements"></iframe>
+  <details><summary>How to explore and interpret this experiment</summary><p>Drag and zoom the map. Toggle trail, candidates, classical, raw, and repaired layers at top right. Depth 3 saved results are initially visible. Scroll the map’s results panel for all saved comparisons. After a live measurement, green markers show its repaired selection; the underlying table still reports archived results.</p><p>Salif Keita: 21,972 observations, March 2008–September 2010, Gourma, Mali. The 400 m circles are assumed monitoring zones, not camera detection ranges. Coverage counts observations of one elephant, not animals protected. Banzena is an optional approximate reference, not a candidate. No quantum advantage is demonstrated.</p><p>Data: Wall et al. (2014), Movebank, doi:10.5441/001/1.f321pf80, CC0. Code: MIT. AI assistance: Claude and OpenAI Codex. See the project write-up for complete disclosures.</p></details>
+  <footer><a href="https://github.com/aanxnd/signal-in-the-bush" target="_blank" rel="noopener">Full source, optimization pipeline, tests, and repeated benchmarks ↗</a></footer>
+</section>

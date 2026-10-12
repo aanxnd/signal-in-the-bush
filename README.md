@@ -32,7 +32,7 @@ py -3.11 -m venv .venv
 Start-Process .\demo\map.html
 ```
 
-If `.venv` is already installed, start with the pipeline command. No activation, credentials, or dataset download is needed. Installation needs internet access; computation uses committed data locally. The map needs internet for Leaflet resources and OpenStreetMap tiles. Run individual scripts from the repository root.
+If `.venv` is already installed, start with the pipeline command. No activation, credentials, or dataset download is needed. Installation needs internet access; computation uses committed data locally. The map bundles its Leaflet/jQuery libraries and public-domain Natural Earth boundaries; no online map tiles are requested. Run individual scripts from the repository root.
 
 On macOS/Linux, use `python3.11 -m venv .venv` and `.venv/bin/python` instead of the Windows executable path. Those platforms have not been verified.
 
@@ -55,6 +55,10 @@ For repeated benchmarks, conservation checks, and tests:
 ```
 
 The normal pipeline runs one seed per depth; `--benchmark` runs seeds 42, 43, and 44 at each depth and ten repeats per classical solver. Both regenerate canonical seed-42 results, repairs, and the map. Computation can take several minutes; benchmarking is longer. Rebuilding only the saved benchmark summary uses `scripts/benchmark_pipeline.py --summarize` and does not run the optimizer.
+
+## Qollab upload package
+
+Run `scripts/package_qollab.py` to create `dist/signal-in-the-bush-qollab.zip`, then upload the ZIP through Qollab's Code → Browse → Files. It contains a visual browser entry, archived comparisons, and fresh backend measurement using previously optimized QAOA parameters. It does not repeat optimization in the browser. See [Qollab guide and verification status](docs/QOLLAB.md). The package is locally tested; on-platform upload/run and public verification are still pending.
 
 ## Data and assumptions
 

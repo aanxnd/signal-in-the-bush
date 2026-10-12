@@ -1,6 +1,6 @@
 # Generated results map (stage 8)
 
-Run `.venv/Scripts/python.exe scripts/build_demo_map.py` from the repository root, then open `demo/map.html`. Internet access is needed for the Leaflet libraries and OpenStreetMap tiles. The normal pipeline also rebuilds this map.
+Run `.venv/Scripts/python.exe scripts/build_demo_map.py` from the repository root, then open `demo/map.html`. The map is self-contained: Leaflet/jQuery and approximate Natural Earth country boundaries are embedded; no online tiles or CDN downloads are needed. The normal pipeline also rebuilds this map.
 
 ## Judge walkthrough
 
@@ -20,3 +20,7 @@ The accessible text table exposes all selections and covered observation counts 
 The trail uses observed dates and is downsampled within segments; gaps over three hours are not connected. Banzena is an optional approximate gazetteer reference, never a selected candidate. The 400 m radius is an assumed monitoring zone, not a camera hardware specification. Coverage counts observations of one elephant; no quantum advantage is claimed.
 
 Verification: generated successfully; Chrome rendered tiles, trail, rings, table, and named controls. Toggling the p=3 raw layer changed its checked state and removed its rings. The accessibility tree exposed all seven result rows and named layer checkboxes. Stage 8 audit/debug complete: all 37 unit tests passed. Regression checks cover saved-selection linkage, stale and missing provenance, corrupted coverage counts, and missing feasible samples. The audit also fixed hardcoded backend captions, distinguished valid empty selections from missing samples, validated budget and coverage counts against the saved matrix, and added the JSON manifest to pipeline freshness checks. Chrome confirmed named marker buttons and keyboard Enter collapsing the results disclosure. Basic accessibility was checked; full WCAG certification was not performed.
+
+## Embedded-runtime fix
+
+Qollab's embedded map received HTTP 403 images from the public OpenStreetMap tile server. The map now embeds Leaflet 1.9.4, jQuery 3.7.1, and approximate public-domain Natural Earth country boundaries instead of requesting tiles or CDN resources. The initial view fits the observed trail; grid lines, candidates, placement/range layers, popups, and live result markers remain interactive. This is a simplified geographic background with no road/satellite detail. Libraries and licenses are retained in demo/assets/. A sandboxed iframe with all external resource loading blocked rendered the corrected map successfully.

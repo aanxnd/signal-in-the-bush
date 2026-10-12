@@ -13,7 +13,7 @@ The implemented local pipeline is complete through stage 8; stage 10 documentati
 | Generated interactive map and accessibility checks | Complete | demo/map.html, docs/DEMO_MAP.md |
 | Current documentation, attribution, and source cleanup | Complete | README.md, SUBMISSION.md, docs/CODE_QUALITY.md |
 | Required Qollab/IonQ simulator execution | Deferred; not run | Local Aer only; stage 9 remains open |
-| Public runnable Qollab project and logged-out verification | Open | Stage 11 |
+| Public runnable Qollab project and logged-out verification | Package prepared and locally tested; upload/run/public verification pending | Stage 11, docs/QOLLAB.md |
 | Recorded/attached video and final submission check | Open | Stage 12; script only |
 
 The sequential local workflow is extraction → coverage/QUBO → QAOA → repair → map. Repeated benchmarks optionally replace the single-seed QAOA step. Conservation sensitivity is a separate diagnostic command. No mock-data harness or pending branch merge is needed for the current pipeline.

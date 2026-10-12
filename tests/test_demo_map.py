@@ -1,6 +1,7 @@
 import copy
 import sys
 import unittest
+from html.parser import HTMLParser
 from pathlib import Path
 from unittest.mock import patch
 
@@ -9,6 +10,26 @@ from build_demo_map import checked_json, load_results
 
 
 class MapResultsTests(unittest.TestCase):
+    def test_map_has_no_external_resource_dependencies(self):
+        class Resources(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.external = []
+
+            def handle_starttag(self, tag, attrs):
+                attributes = dict(attrs)
+                if tag in ("script", "img", "link", "iframe"):
+                    target = attributes.get("src", attributes.get("href", ""))
+                    if target.startswith(("http:", "https:", "//")):
+                        self.external.append(target)
+
+        output = Path("demo/map.html").read_text(encoding="utf-8")
+        parser = Resources()
+        parser.feed(output)
+        self.assertEqual(parser.external, [])
+        self.assertNotIn("L.tileLayer(", output)
+        self.assertIn("Natural Earth", output)
+
     def test_generated_selections_and_coordinate_identity(self):
         sites, baseline, placements, _ = load_results()
         self.assertEqual(placements[0]["sites"], baseline["exact"]["sites"])
